@@ -1,0 +1,30 @@
+{
+  "collection": "@nestjs/schematics",
+  "sourceRoot": "apps/uranus-pm/src",
+  "monorepo": true,
+  "root": "apps/uranus-pm",
+  "compilerOptions": {
+    "webpack": true,
+    "tsConfigPath": "apps/uranus-pm/tsconfig.app.json"
+  },
+  "projects": {
+    "uranus-pm": {
+      "type": "application",
+      "root": "apps/uranus-pm",
+      "entryFile": "main",
+      "sourceRoot": "apps/uranus-pm/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/uranus-pm/tsconfig.app.json"
+      }
+    },
+    "users": {
+      "type": "application",
+      "root": "apps/users",
+      "entryFile": "main",
+      "sourceRoot": "apps/users/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/users/tsconfig.app.json"
+      }
+    }
+  }
+}
