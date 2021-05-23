@@ -1,4 +1,4 @@
-import { Controller, Get } from '@nestjs/common';
+import { Body, Controller, Get, Post } from '@nestjs/common';
 import { AppService } from './app.service';
 import { UsersFacadeService } from 'common/common';
 
@@ -10,7 +10,12 @@ export class AppController {
   ) {}
 
   @Get()
-  getHello(): any {
+  getAll(): any {
     return this.usersFacade.getAll();
+  }
+
+  @Post()
+  create(@Body() dto: any): any {
+    return this.usersFacade.create(dto);
   }
 }

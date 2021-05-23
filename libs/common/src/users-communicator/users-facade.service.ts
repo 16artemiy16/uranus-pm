@@ -14,4 +14,8 @@ export class UsersFacadeService {
   getAll() {
     return this.usersClient.send('get_all', '');
   }
+
+  create(data: any) {
+    return this.usersClient.send('create', data);
+  }
 }
