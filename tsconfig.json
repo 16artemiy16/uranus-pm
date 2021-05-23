@@ -12,10 +12,10 @@
     "baseUrl": "./",
     "incremental": true,
     "paths": {
-      "common/common": [
+      "common": [
         "libs/common/src"
       ],
-      "common/common/*": [
+      "common/*": [
         "libs/common/src/*"
       ]
     }

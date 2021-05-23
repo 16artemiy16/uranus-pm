@@ -1,2 +1,1 @@
-export * from './users-communicator/users-communicator.module';
-export * from './users-communicator/users-facade.service';
+export * as users from './users-communicator';

@@ -1,13 +1,14 @@
 import { Module } from '@nestjs/common';
-import { UsersFacadeService } from 'common/common/users-communicator/users-facade.service';
+import { UsersFacadeService } from './users-facade.service';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import rabbitConfig from '../../../../config/rabbit.config';
+import { USERS_SERVICE } from './constants';
 
 @Module({
   imports: [
     ClientsModule.register([
       {
-        name: 'USERS_SERVICE',
+        name: USERS_SERVICE,
         transport: Transport.RMQ,
         options: rabbitConfig.users.options,
       },

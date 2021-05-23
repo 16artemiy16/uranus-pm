@@ -1,21 +1,24 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, OnApplicationBootstrap } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
+import { USERS_SERVICE } from './constants';
+import { ReqCreate, ResCreate, ResGetAll, UsersMsg } from './communication.model';
+import { Observable } from 'rxjs';
 
 @Injectable()
-export class UsersFacadeService {
+export class UsersFacadeService implements OnApplicationBootstrap {
   constructor(
-    @Inject('USERS_SERVICE') private readonly usersClient: ClientProxy,
+    @Inject(USERS_SERVICE) private readonly usersClient: ClientProxy,
   ) {}
 
   async onApplicationBootstrap() {
     await this.usersClient.connect();
   }
 
-  getAll() {
-    return this.usersClient.send('get_all', '');
+  getAll(): Observable<ResGetAll> {
+    return this.usersClient.send<ResGetAll, ''>(UsersMsg.GetAll, '');
   }
 
-  create(data: any) {
-    return this.usersClient.send('create', data);
+  create(data: ReqCreate): Observable<ResCreate> {
+    return this.usersClient.send<ResCreate, ReqCreate>(UsersMsg.Create, data);
   }
 }
