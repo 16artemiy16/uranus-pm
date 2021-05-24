@@ -1,6 +1,8 @@
 export enum UsersMsg {
   GetAll = 'get_all',
   Create = 'create',
+  Login = 'login',
+  Verify = 'verify',
 }
 
 export interface UserI {
@@ -15,3 +17,10 @@ export type ReqCreate = {
   password: string;
 };
 export type ResCreate = UserI;
+
+export type ReqLogin = {
+  email: string;
+  password: string;
+};
+
+export type ResLogin = string | null;
