@@ -1,3 +1,3 @@
-export * from './communication.model';
+export * from './models/communication.model';
 export * from './users-communicator.module';
-export * from './users-facade.service';
+export * from './services/users-facade.service';

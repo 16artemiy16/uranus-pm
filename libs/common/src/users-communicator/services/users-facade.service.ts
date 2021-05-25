@@ -1,7 +1,7 @@
 import { Inject, Injectable, OnApplicationBootstrap } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
-import { USERS_SERVICE } from './constants';
-import { ReqCreate, ResCreate, ResGetAll, ResLogin, UsersMsg } from './communication.model';
+import { USERS_SERVICE } from '../constants';
+import { ReqCreate, ResCreate, ResGetAll, ResLogin, UsersMsg } from '../models/communication.model';
 import { Observable } from 'rxjs';
 
 @Injectable()

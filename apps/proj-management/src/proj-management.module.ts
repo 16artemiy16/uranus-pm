@@ -1,9 +1,10 @@
 import { Module } from '@nestjs/common';
-import { ProjManagementService } from './proj-management.service';
+import { ProjManagementService } from './services/proj-management.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import mongoConfig from '../../../config/mongo.config';
 import { Board, BoardSchema } from './schemas/board.schema';
 import { Task, TaskSchema } from './schemas/task.schema';
+import { ProjManagementController } from './controllers/proj-management.controller';
 
 @Module({
   imports: [
@@ -13,7 +14,7 @@ import { Task, TaskSchema } from './schemas/task.schema';
       { name: Task.name, schema: TaskSchema },
     ]),
   ],
-  controllers: [],
+  controllers: [ProjManagementController],
   providers: [ProjManagementService],
 })
 export class ProjManagementModule {}

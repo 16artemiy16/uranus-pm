@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { UsersFacadeService } from './users-facade.service';
+import { UsersFacadeService } from './services/users-facade.service';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import rabbitConfig from '../../../../config/rabbit.config';
 import { USERS_SERVICE } from './constants';

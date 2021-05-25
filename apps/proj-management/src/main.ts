@@ -6,7 +6,7 @@ import rabbitConfig from '../../../config/rabbit.config';
 async function bootstrap() {
   const app = await NestFactory.createMicroservice(ProjManagementModule, {
     transport: Transport.RMQ,
-    options: rabbitConfig.users.options,
+    options: rabbitConfig.projManagement.options,
   });
   await app.listen(() => {
     console.log('Microservice ProjManagement is listening');
