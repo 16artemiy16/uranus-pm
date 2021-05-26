@@ -35,13 +35,13 @@
         "tsConfigPath": "libs/common/tsconfig.lib.json"
       }
     },
-    "proj-management": {
+    "pm": {
       "type": "application",
-      "root": "apps/proj-management",
+      "root": "apps/pm",
       "entryFile": "main",
-      "sourceRoot": "apps/proj-management/src",
+      "sourceRoot": "apps/pm/src",
       "compilerOptions": {
-        "tsConfigPath": "apps/proj-management/tsconfig.app.json"
+        "tsConfigPath": "apps/pm/tsconfig.app.json"
       }
     }
   }

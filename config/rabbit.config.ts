@@ -2,13 +2,13 @@ export default {
   users: {
     options: {
       urls: ['amqp://localhost:5672'],
-      queue: 'users_queue',
+      queue: 'uranus_users_queue',
     },
   },
-  projManagement: {
+  pm: {
     options: {
       urls: ['amqp://localhost:5672'],
-      queue: 'proj_management_queue',
+      queue: 'uranus_pm_queue',
     },
   },
 };

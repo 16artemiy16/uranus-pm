@@ -1,15 +1,15 @@
 import { NestFactory } from '@nestjs/core';
-import { ProjManagementModule } from './proj-management.module';
+import { PMModule } from './pm.module';
 import { Transport } from '@nestjs/microservices';
 import rabbitConfig from '../../../config/rabbit.config';
 
 async function bootstrap() {
-  const app = await NestFactory.createMicroservice(ProjManagementModule, {
+  const app = await NestFactory.createMicroservice(PMModule, {
     transport: Transport.RMQ,
-    options: rabbitConfig.projManagement.options,
+    options: rabbitConfig.pm.options,
   });
   await app.listen(() => {
-    console.log('Microservice ProjManagement is listening');
+    console.log('Microservice PM is listening');
   });
 }
 bootstrap();

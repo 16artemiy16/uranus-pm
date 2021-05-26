@@ -5,7 +5,7 @@ import { Model } from 'mongoose';
 import { Board, BoardDocument } from '../schemas/board.schema';
 
 @Injectable()
-export class ProjManagementService {
+export class PmService {
   constructor(
     @InjectModel(Task.name) private taskModel: Model<TaskDocument>,
     @InjectModel(Board.name) private boardModel: Model<BoardDocument>

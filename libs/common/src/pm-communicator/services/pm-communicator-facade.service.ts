@@ -14,7 +14,6 @@ export class PmCommunicatorFacadeService implements OnApplicationBootstrap {
   }
 
   getAllBoards() {
-    console.log('FACADE -> GET ALL BOARDS', BoardMsg.GetAll);
     return this.pmClient.send(BoardMsg.GetAll, '');
   }
 

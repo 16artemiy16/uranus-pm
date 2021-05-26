@@ -1,17 +1,16 @@
 import { Controller } from '@nestjs/common';
 import { MessagePattern } from '@nestjs/microservices';
 import { BoardMsg } from 'common/pm-communicator/models/communication.model';
-import { ProjManagementService } from '../services/proj-management.service';
+import { PmService } from '../services/pm.service';
 
 @Controller()
-export class ProjManagementController {
+export class PmController {
   constructor(
-    private readonly pmService: ProjManagementService
+    private readonly pmService: PmService
   ) {}
 
   @MessagePattern(BoardMsg.GetAll)
   getAllBoards() {
-    console.log('Gte_All_BOARDS contoller PM')
     return this.pmService.getBoards();
   }
 

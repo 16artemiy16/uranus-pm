@@ -10,7 +10,7 @@ import { PmCommunicatorFacadeService } from './services/pm-communicator-facade.s
       {
         name: PM_SERVICE,
         transport: Transport.RMQ,
-        options: rabbitConfig.projManagement.options,
+        options: rabbitConfig.pm.options,
       },
     ]),
   ],
