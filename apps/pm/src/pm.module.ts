@@ -5,6 +5,8 @@ import mongoConfig from '../../../config/mongo.config';
 import { Board, BoardSchema } from './schemas/board.schema';
 import { Task, TaskSchema } from './schemas/task.schema';
 import { PmController } from './controllers/pm.controller';
+import { BoardsController } from './controllers/boards.controller';
+import { BoardsService } from './services/boards.service';
 
 @Module({
   imports: [
@@ -14,7 +16,7 @@ import { PmController } from './controllers/pm.controller';
       { name: Task.name, schema: TaskSchema },
     ]),
   ],
-  controllers: [PmController],
-  providers: [PmService],
+  controllers: [PmController, BoardsController],
+  providers: [PmService, BoardsService],
 })
 export class PMModule {}

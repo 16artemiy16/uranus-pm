@@ -3,6 +3,7 @@ import { ClientsModule, Transport } from '@nestjs/microservices';
 import rabbitConfig from '../../../../config/rabbit.config';
 import { PM_SERVICE } from './constants';
 import { PmCommunicatorFacadeService } from './services/pm-communicator-facade.service';
+import { BoardFacadeService } from 'common/pm-communicator/services/board-facade.service';
 
 @Module({
   imports: [
@@ -14,7 +15,7 @@ import { PmCommunicatorFacadeService } from './services/pm-communicator-facade.s
       },
     ]),
   ],
-  providers: [PmCommunicatorFacadeService],
-  exports: [PmCommunicatorFacadeService],
+  providers: [PmCommunicatorFacadeService, BoardFacadeService],
+  exports: [PmCommunicatorFacadeService, BoardFacadeService],
 })
 export class PmCommunicatorModule {}
