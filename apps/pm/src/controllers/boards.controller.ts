@@ -1,25 +1,25 @@
 import { Controller } from '@nestjs/common';
-import { PmService } from '../services/pm.service';
 import { MessagePattern } from '@nestjs/microservices';
-import { BoardMsg } from 'common/pm-communicator';
 import { BoardsService } from '../services/boards.service';
+import { ReqCreate, ReqGet } from 'common/pm-communicator/models/req.model';
+import { ResCreate, ResGet } from 'common/pm-communicator/models/res.model';
+import { BoardMsg } from 'common/pm-communicator/models/msg.model';
 
-@Controller('boards')
+@Controller()
 export class BoardsController {
   constructor(
-    private readonly pmService: PmService,
     private readonly boardsService: BoardsService
   ) {}
 
   @MessagePattern(BoardMsg.Get)
-  get(data: { filter: Record<string, any>, projection: Record<string, any> }) {
-    const { filter, projection } = data;
+  get(req: ReqGet): Promise<ResGet> {
+    const { filter = {}, projection = {} } = req;
     return this.boardsService.get(filter, projection);
   }
 
   @MessagePattern(BoardMsg.Create)
-  create(data: { userId, dto: any }) {
-    const { userId, dto } = data;
+  create(req: ReqCreate): Promise<ResCreate> {
+    const { userId, dto } = req;
     return this.boardsService.create(userId, dto);
   }
 }

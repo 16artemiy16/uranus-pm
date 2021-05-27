@@ -1,12 +1,10 @@
 import { Inject, Injectable, OnApplicationBootstrap } from '@nestjs/common';
 import { PM_SERVICE } from 'common/pm-communicator/constants';
 import { ClientProxy } from '@nestjs/microservices';
-import { BoardMsg } from 'common/pm-communicator';
-
-interface RequestOptionsI {
-  filter: Record<string, any>;
-  projection: Record<string, any>;
-}
+import { BoardMsg } from 'common/pm-communicator/models/msg.model';
+import { Observable } from 'rxjs';
+import { BoardI } from 'common/pm-communicator/models/entities/board.interface';
+import { CreateBoardDto } from 'common/pm-communicator/dto/create-board.dto';
 
 @Injectable()
 export class BoardFacadeService implements OnApplicationBootstrap {
@@ -18,16 +16,16 @@ export class BoardFacadeService implements OnApplicationBootstrap {
     await this.pmClient.connect();
   }
 
-  get(filter: Record<string, any> = {}, projection: Record<string, any> = {}) {
+  get(filter: Record<string, any> = {}, projection: Record<string, any> = {}): Observable<BoardI[]> {
     return this.pmClient.send(BoardMsg.Get, { filter, projection });
   }
 
-  getByOwner(ownerId: string, projection: Record<string, any> = {}) {
+  getByOwner(ownerId: string, projection: Record<string, any> = {}): Observable<BoardI[]> {
     const filter = { ownerId };
     return this.pmClient.send(BoardMsg.Get, { filter, projection });
   }
 
-  create(userId, dto) {
+  create(userId: string, dto: CreateBoardDto): Observable<BoardI> {
     return this.pmClient.send(BoardMsg.Create, { userId, dto });
   }
 }
