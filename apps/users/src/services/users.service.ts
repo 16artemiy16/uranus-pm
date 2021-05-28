@@ -2,7 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { User, UserDocument } from '../schemas/user.schema';
 import { Model } from 'mongoose';
-import { ResGetAll, UserI } from 'common/users-communicator';
+import { CreateUserDto } from 'common/users-communicator/dto/create-user.dto';
+import { UserI } from 'common/users-communicator/models/entities/user.interface';
 
 @Injectable()
 export class UsersService {
@@ -10,8 +11,8 @@ export class UsersService {
     @InjectModel(User.name) private userModel: Model<UserDocument>,
   ) {}
 
-  async getAll(): Promise<ResGetAll> {
-    return await this.userModel.find().lean() as ResGetAll;
+  async getAll(): Promise<UserI[]> {
+    return await this.userModel.find().lean() as UserI[];
   }
 
   async find(filter = {}, projection = {}): Promise<UserI[]> {
@@ -26,8 +27,9 @@ export class UsersService {
     return await this.userModel.countDocuments(filter);
   }
 
-  async create(dto: any): Promise<any> {
+  async create(dto: CreateUserDto): Promise<boolean> {
     const user = new this.userModel(dto);
-    return await user.save();
+    await user.save();
+    return true;
   }
 }

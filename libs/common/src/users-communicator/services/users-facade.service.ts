@@ -1,8 +1,11 @@
 import { Inject, Injectable, OnApplicationBootstrap } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
 import { USERS_SERVICE } from '../constants';
-import { ReqCreate, ResCreate, ResGetAll, ResLogin, UsersMsg } from '../models/communication.model';
 import { Observable } from 'rxjs';
+import { UserI } from 'common/users-communicator/models/entities/user.interface';
+import { CreateUserDto } from 'common/users-communicator/dto/create-user.dto';
+import { UsersMsg } from 'common/users-communicator/models/msg.model';
+import { JwtUserType } from 'common/users-communicator/models/entities/jwt-user.type';
 
 @Injectable()
 export class UsersFacadeService implements OnApplicationBootstrap {
@@ -14,19 +17,19 @@ export class UsersFacadeService implements OnApplicationBootstrap {
     await this.usersClient.connect();
   }
 
-  getAll(): Observable<ResGetAll> {
-    return this.usersClient.send<ResGetAll, ''>(UsersMsg.GetAll, '');
+  getAll(): Observable<UserI[]> {
+    return this.usersClient.send(UsersMsg.GetAll, '');
   }
 
-  create(data: ReqCreate): Observable<ResCreate> {
-    return this.usersClient.send<ResCreate, ReqCreate>(UsersMsg.Create, data);
+  create(data: CreateUserDto): Observable<boolean> {
+    return this.usersClient.send(UsersMsg.Create, data);
   }
 
-  login(email: string, password: string): Observable<ResLogin> {
+  login(email: string, password: string): Observable<string | null> {
     return this.usersClient.send(UsersMsg.Login, { email, password });
   }
   
-  verify(token: string): Observable<any> {
+  verify(token: string): Observable<JwtUserType | null> {
     return this.usersClient.send(UsersMsg.Verify, token);
   }
 }
