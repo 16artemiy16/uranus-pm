@@ -5,7 +5,9 @@ import { User } from '../decorators/user.decorator';
 import { CreateBoardDto } from 'common/pm-communicator/dto/create-board.dto';
 import { BoardI } from 'common/pm-communicator/models/entities/board.interface';
 import { Observable } from 'rxjs';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('boards')
 @Controller('boards')
 export class BoardsController {
   constructor(
@@ -17,6 +19,7 @@ export class BoardsController {
     return this.boardsFacade.get({ ownerId });
   }
 
+  @ApiBearerAuth()
   @UseGuards(AuthGuard)
   @Post()
   createBoard(@Body() dto: CreateBoardDto, @User('_id') userId: string): Observable<BoardI> {

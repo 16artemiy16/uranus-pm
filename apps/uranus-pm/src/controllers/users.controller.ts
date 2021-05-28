@@ -1,15 +1,20 @@
-import { Body, Controller, Get, Post, UnauthorizedException, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, Post, UnauthorizedException, UseGuards } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { AuthGuard } from '../guards/auth.guard';
 import { CreateUserDto } from 'common/users-communicator/dto/create-user.dto';
 import { UsersFacadeService } from 'common/users-communicator';
 import { UserI } from 'common/users-communicator/models/entities/user.interface';
 import { tap } from 'rxjs/operators';
+import { ApiBearerAuth, ApiOkResponse, ApiTags, ApiUnauthorizedResponse } from '@nestjs/swagger';
 
+@ApiTags('users')
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersFacade: UsersFacadeService) {}
 
+  @ApiOkResponse({ description: 'Returns JWT token if the credentials correct', type: String })
+  @ApiUnauthorizedResponse({ description: 'The credentials incorrect' })
+  @HttpCode(200)
   @Post('auth')
   login(@Body() body: CreateUserDto) {
     return this.usersFacade.login(body.email, body.password)
@@ -22,6 +27,7 @@ export class UsersController {
       );
   }
 
+  @ApiBearerAuth()
   @UseGuards(AuthGuard)
   @Get()
   getAll(): Observable<UserI[]> {
