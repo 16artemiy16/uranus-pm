@@ -32,4 +32,8 @@ export class UsersFacadeService implements OnApplicationBootstrap {
   verify(token: string): Observable<JwtUserType | null> {
     return this.usersClient.send(UsersMsg.Verify, token);
   }
+
+  emailIsFree(email: string): Observable<boolean> {
+    return this.usersClient.send(UsersMsg.EmailIsFree, email);
+  }
 }

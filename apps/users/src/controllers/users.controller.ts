@@ -33,4 +33,9 @@ export class UsersController {
   verify(token: string): Promise<JwtUserType> {
     return this.authService.verify(token);
   }
+
+  @MessagePattern(UsersMsg.EmailIsFree)
+  emailIsFree(email: string): Promise<boolean> {
+    return this.authService.isEmailFree(email);
+  }
 }

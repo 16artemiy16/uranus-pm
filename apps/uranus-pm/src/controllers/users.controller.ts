@@ -1,11 +1,11 @@
-import { Body, Controller, Get, HttpCode, Post, UnauthorizedException, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, Param, Post, UnauthorizedException, UseGuards } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { AuthGuard } from '../guards/auth.guard';
 import { CreateUserDto } from 'common/users-communicator/dto/create-user.dto';
 import { UsersFacadeService } from 'common/users-communicator';
 import { UserI } from 'common/users-communicator/models/entities/user.interface';
 import { tap } from 'rxjs/operators';
-import { ApiBearerAuth, ApiOkResponse, ApiTags, ApiUnauthorizedResponse } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOkResponse, ApiParam, ApiTags, ApiUnauthorizedResponse } from '@nestjs/swagger';
 
 @ApiTags('users')
 @Controller('users')
@@ -25,6 +25,12 @@ export class UsersController {
           }
         })
       );
+  }
+
+  @ApiOkResponse({ description: 'Checks is the email free to use', type: Boolean })
+  @Get('email_is_free/:email')
+  emailIsFree(@Param('email') email: string): Observable<boolean> {
+    return this.usersFacade.emailIsFree(email);
   }
 
   @ApiBearerAuth()

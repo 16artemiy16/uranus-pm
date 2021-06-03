@@ -25,4 +25,8 @@ export class AuthService {
   verify(token: string): Promise<JwtUserType | null> {
     return this.jwtService.verifyAsync(token).catch(() => null);
   }
+
+  async isEmailFree(email: string): Promise<boolean> {
+    return await this.usersService.count({ email }) === 0;
+  }
 }
