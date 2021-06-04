@@ -5,6 +5,7 @@ import { Model } from 'mongoose';
 import { CreateUserDto } from 'common/users-communicator/dto/create-user.dto';
 import { UserI } from 'common/users-communicator/models/entities/user.interface';
 import * as bcrypt from 'bcrypt';
+import { RpcException } from '@nestjs/microservices';
 
 @Injectable()
 export class UsersService {
@@ -29,8 +30,15 @@ export class UsersService {
   }
 
   async create(dto: CreateUserDto): Promise<boolean> {
-    const { password } = dto;
+    const { email, password } = dto;
     const hashedPassword = await bcrypt.hash(password, 10);
+
+    if (await this.userModel.count({ email })) {
+      throw new RpcException({
+        statusCode: 400,
+        message: 'The user with this email already exists!',
+      });
+    }
 
     const user = new this.userModel({ ...dto, password: hashedPassword });
     await user.save();
