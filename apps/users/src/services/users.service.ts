@@ -36,7 +36,8 @@ export class UsersService {
     if (await this.userModel.count({ email })) {
       throw new RpcException({
         statusCode: 400,
-        message: 'The user with this email already exists!',
+        message: 'sfsf',
+        i18n: 'emailOccupied',
       });
     }
 
