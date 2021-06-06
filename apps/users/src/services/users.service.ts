@@ -36,8 +36,7 @@ export class UsersService {
     if (await this.userModel.count({ email })) {
       throw new RpcException({
         statusCode: 400,
-        message: 'sfsf',
-        i18n: 'emailOccupied',
+        message: 'emailOccupied',
       });
     }
 

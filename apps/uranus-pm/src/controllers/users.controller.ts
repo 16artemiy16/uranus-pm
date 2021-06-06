@@ -30,7 +30,7 @@ export class UsersController {
       .pipe(
         tap((token) => {
           if (token === null) {
-            throw new UnauthorizedException('User or email invalid');
+            throw new UnauthorizedException('userNotExist');
           }
         })
       );

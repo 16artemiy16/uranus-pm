@@ -3,7 +3,6 @@ import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AllExceptionsFilter } from './filters/rcp-exception.filter';
-import { TranslatorInterceptor } from './interceptors/translator.interceptor';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -11,7 +10,6 @@ async function bootstrap() {
   app.enableCors();
   app.useGlobalPipes(new ValidationPipe());
   app.useGlobalFilters(new AllExceptionsFilter());
-  app.useGlobalInterceptors(new TranslatorInterceptor());
 
   const config = new DocumentBuilder()
     .setTitle('Uranus PM')
