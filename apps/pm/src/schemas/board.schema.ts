@@ -8,6 +8,9 @@ export class Board {
   @Prop({ required: true })
   name: string;
 
+  @Prop()
+  description: string;
+
   @Prop({ required: true })
   ownerId: string;
 }

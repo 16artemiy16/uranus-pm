@@ -5,4 +5,7 @@ export class CreateBoardDto {
   @ApiProperty()
   @IsNotEmpty()
   name: string;
+
+  @ApiProperty()
+  description?: string;
 }
