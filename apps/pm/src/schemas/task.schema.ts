@@ -16,6 +16,9 @@ export class Task {
 
   @Prop()
   assigneeId: string;
+
+  @Prop()
+  columnId: string;
 }
 
 export const TaskSchema = SchemaFactory.createForClass(Task);
