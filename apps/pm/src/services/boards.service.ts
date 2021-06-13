@@ -7,6 +7,9 @@ import { CreateBoardDto } from 'common/pm-communicator/dto/create-board.dto';
 import { Column, ColumnDocument } from '../schemas/column.schema';
 import { Task, TaskDocument } from '../schemas/task.schema';
 import { ColumnI } from 'common/pm-communicator/models/entities/column.interface';
+import { CreateTaskDto } from 'common/pm-communicator/dto/create-task.dto';
+import { TaskI } from 'common/pm-communicator/models/entities/task.interface';
+import { RpcException } from '@nestjs/microservices';
 
 @Injectable()
 export class BoardsService {
@@ -47,5 +50,31 @@ export class BoardsService {
     const newColumns = columns.map(({ name, order }) => ({ name, order, boardId }));
     await this.columnModel.insertMany(newColumns);
     return true;
+  }
+
+  async createTask(boardId: string, dto: CreateTaskDto): Promise<TaskI> {
+    const columns = await this.columnModel
+      .find({ boardId }, { _id: 1 })
+      .sort({ order: 1 })
+      .limit(1)
+      .lean()
+      .exec();
+
+    const columnId = columns[0]?._id;
+
+    if (!columnId) {
+      throw new RpcException({
+        statusCode: 400,
+        message: 'boardHasNoColumns',
+      });
+    }
+
+    const task = new this.taskModel({
+      ...dto,
+      boardId,
+      columnId,
+    });
+
+    return (await task.save()) as TaskI;
   }
 }

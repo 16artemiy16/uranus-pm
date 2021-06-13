@@ -1,4 +1,5 @@
 import { CreateBoardDto } from 'common/pm-communicator/dto/create-board.dto';
+import { CreateTaskDto } from 'common/pm-communicator/dto/create-task.dto';
 
 export type ReqGet = {
   filter?: Record<string, any>;
@@ -17,4 +18,9 @@ export type ReqGetColumns = {
 export type ReqCreateColumns = {
   boardId: string;
   columns: { name: string; order: number }[];
-}
+};
+
+export type ReqCreateTask = {
+  boardId: string;
+  dto: CreateTaskDto;
+};

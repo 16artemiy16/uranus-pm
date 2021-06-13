@@ -6,9 +6,5 @@ export enum BoardMsg {
   Update = 'board_update',
   CreateColumns = 'board_create_columns',
   GetColumns = 'board_get_columns',
-}
-
-export enum TaskMsg {
-  GetAll = 'task_get_all',
-  Create = 'task_create',
+  CreateTask = 'board_task_create',
 }

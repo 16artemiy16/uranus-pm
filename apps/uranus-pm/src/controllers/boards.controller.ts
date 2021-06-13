@@ -8,6 +8,8 @@ import { Observable } from 'rxjs';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { ColumnI } from 'common/pm-communicator/models/entities/column.interface';
 import { CreateColumnsDto } from 'common/pm-communicator/dto/create-columns.dto';
+import { CreateTaskDto } from 'common/pm-communicator/dto/create-task.dto';
+import { TaskI } from 'common/pm-communicator/models/entities/task.interface';
 
 @ApiTags('boards')
 @Controller('boards')
@@ -44,5 +46,10 @@ export class BoardsController {
   createColumns(@Param('boardId') boardId: string, @Body() dto: CreateColumnsDto): Observable<boolean> {
     const { columns } = dto;
     return this.boardsFacade.createColumns(boardId, columns);
+  }
+
+  @Post(':boardId/task')
+  createTask(@Param('boardId') boardId: string, @Body() dto: CreateTaskDto): Observable<TaskI> {
+    return this.boardsFacade.createTask(boardId, dto);
   }
 }

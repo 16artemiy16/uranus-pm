@@ -1,10 +1,17 @@
 import { Controller } from '@nestjs/common';
 import { MessagePattern } from '@nestjs/microservices';
 import { BoardsService } from '../services/boards.service';
-import { ReqCreate, ReqCreateColumns, ReqGet, ReqGetColumns } from 'common/pm-communicator/models/req.model';
+import {
+  ReqCreate,
+  ReqCreateColumns,
+  ReqCreateTask,
+  ReqGet,
+  ReqGetColumns
+} from 'common/pm-communicator/models/req.model';
 import { ResCreate, ResGet } from 'common/pm-communicator/models/res.model';
 import { BoardMsg } from 'common/pm-communicator/models/msg.model';
 import { ColumnI } from 'common/pm-communicator/models/entities/column.interface';
+import { TaskI } from 'common/pm-communicator/models/entities/task.interface';
 
 @Controller()
 export class BoardsController {
@@ -34,5 +41,11 @@ export class BoardsController {
   createColumns(req: ReqCreateColumns): Promise<boolean> {
     const { boardId, columns } = req;
     return this.boardsService.createColumns(boardId, columns);
+  }
+
+  @MessagePattern(BoardMsg.CreateTask)
+  createTask(req: ReqCreateTask): Promise<TaskI> {
+    const { boardId, dto } = req;
+    return this.boardsService.createTask(boardId, dto);
   }
 }

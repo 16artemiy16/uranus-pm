@@ -3,9 +3,11 @@ import { IsNotEmpty, ValidateNested } from 'class-validator';
 import { Type } from 'class-transformer';
 
 class ColumnDto {
+  @ApiProperty()
   @IsNotEmpty()
   name: string;
 
+  @ApiProperty()
   @IsNotEmpty()
   order: number;
 }
