@@ -7,4 +7,5 @@ export enum BoardMsg {
   CreateColumns = 'board_create_columns',
   GetColumns = 'board_get_columns',
   CreateTask = 'board_task_create',
+  MoveTask = 'board_move_task',
 }

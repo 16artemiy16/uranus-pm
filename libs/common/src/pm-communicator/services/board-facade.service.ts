@@ -42,4 +42,8 @@ export class BoardFacadeService implements OnApplicationBootstrap {
   createTask(boardId: string, dto: CreateTaskDto): Observable<boolean> {
     return this.pmClient.send(BoardMsg.CreateTask, { boardId, dto });
   }
+
+  moveTask(taskId: string, toIndex: number, targetBoardId?: string): Observable<boolean> {
+    return this.pmClient.send(BoardMsg.MoveTask, { taskId, toIndex, targetBoardId });
+  }
 }

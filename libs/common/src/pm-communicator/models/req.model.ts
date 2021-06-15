@@ -24,3 +24,9 @@ export type ReqCreateTask = {
   boardId: string;
   dto: CreateTaskDto;
 };
+
+export type ReqMoveTask = {
+  taskId: string;
+  toIndex: number;
+  targetBoardId?: string;
+};

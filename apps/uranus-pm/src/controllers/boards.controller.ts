@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Put, UseGuards } from '@nestjs/common';
 import { BoardFacadeService } from 'common/pm-communicator/services/board-facade.service';
 import { AuthGuard } from '../guards/auth.guard';
 import { User } from '../decorators/user.decorator';
@@ -9,6 +9,7 @@ import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { ColumnI } from 'common/pm-communicator/models/entities/column.interface';
 import { CreateColumnsDto } from 'common/pm-communicator/dto/create-columns.dto';
 import { CreateTaskDto } from 'common/pm-communicator/dto/create-task.dto';
+import { MoveTaskDto } from 'common/pm-communicator/dto/move-task.dto';
 
 @ApiTags('boards')
 @Controller('boards')
@@ -50,5 +51,14 @@ export class BoardsController {
   @Post(':boardId/task')
   createTask(@Param('boardId') boardId: string, @Body() dto: CreateTaskDto): Observable<boolean> {
     return this.boardsFacade.createTask(boardId, dto);
+  }
+
+  @Put('task/:taskId/move')
+  moveTask(
+    @Param('taskId') taskId: string,
+    @Body() dto: MoveTaskDto,
+  ): Observable<boolean> {
+    const { toIndex, targetBoardId } = dto;
+    return this.boardsFacade.moveTask(taskId, toIndex, targetBoardId);
   }
 }

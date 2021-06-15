@@ -6,12 +6,12 @@ import {
   ReqCreateColumns,
   ReqCreateTask,
   ReqGet,
-  ReqGetColumns
+  ReqGetColumns,
+  ReqMoveTask
 } from 'common/pm-communicator/models/req.model';
 import { ResCreate, ResGet } from 'common/pm-communicator/models/res.model';
 import { BoardMsg } from 'common/pm-communicator/models/msg.model';
 import { ColumnI } from 'common/pm-communicator/models/entities/column.interface';
-import { TaskI } from 'common/pm-communicator/models/entities/task.interface';
 
 @Controller()
 export class BoardsController {
@@ -47,5 +47,11 @@ export class BoardsController {
   createTask(req: ReqCreateTask): Promise<boolean> {
     const { boardId, dto } = req;
     return this.boardsService.createTask(boardId, dto);
+  }
+
+  @MessagePattern(BoardMsg.MoveTask)
+  moveTask(req: ReqMoveTask): Promise<boolean> {
+    const { taskId, toIndex, targetBoardId } = req;
+    return this.boardsService.moveTask(taskId, toIndex, targetBoardId);
   }
 }

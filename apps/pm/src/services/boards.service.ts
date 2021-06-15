@@ -59,4 +59,26 @@ export class BoardsService {
 
     return true;
   }
+
+  async moveTask(taskId: string, toIndex: number, targetBoardId?: string): Promise<boolean> {
+    const column = await this.columnModel
+      .findOne({ 'tasks._id': taskId })
+
+    if (!column) {
+      throw new RpcException({
+        statusCode: 404,
+        message: 'noTaskWithThisId',
+      });
+    }
+
+    const task = column.tasks.find((item) => item._id.toString() === taskId);
+
+    column.tasks.splice(toIndex, 1, task, column.tasks[toIndex]);
+    column.tasks = column.tasks.filter((item, idx) => {
+      return !(item._id.toString() === task._id.toString() && idx !== toIndex);
+    });
+
+    await column.save();
+    return true;
+  }
 }
