@@ -39,7 +39,7 @@ export class BoardFacadeService implements OnApplicationBootstrap {
     return this.pmClient.send(BoardMsg.CreateColumns, { boardId, columns });
   }
 
-  createTask(boardId: string, dto: CreateTaskDto): Observable<TaskI> {
+  createTask(boardId: string, dto: CreateTaskDto): Observable<boolean> {
     return this.pmClient.send(BoardMsg.CreateTask, { boardId, dto });
   }
 }

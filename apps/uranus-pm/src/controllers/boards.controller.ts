@@ -9,7 +9,6 @@ import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { ColumnI } from 'common/pm-communicator/models/entities/column.interface';
 import { CreateColumnsDto } from 'common/pm-communicator/dto/create-columns.dto';
 import { CreateTaskDto } from 'common/pm-communicator/dto/create-task.dto';
-import { TaskI } from 'common/pm-communicator/models/entities/task.interface';
 
 @ApiTags('boards')
 @Controller('boards')
@@ -49,7 +48,7 @@ export class BoardsController {
   }
 
   @Post(':boardId/task')
-  createTask(@Param('boardId') boardId: string, @Body() dto: CreateTaskDto): Observable<TaskI> {
+  createTask(@Param('boardId') boardId: string, @Body() dto: CreateTaskDto): Observable<boolean> {
     return this.boardsFacade.createTask(boardId, dto);
   }
 }

@@ -13,8 +13,4 @@ export class CreateTaskDto {
   @ApiProperty()
   @Prop()
   assigneeId?: string;
-
-  @ApiProperty()
-  @Prop()
-  columnId?: string;
 }

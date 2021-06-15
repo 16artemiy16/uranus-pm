@@ -5,18 +5,15 @@ import { Model } from 'mongoose';
 import { BoardI } from 'common/pm-communicator/models/entities/board.interface';
 import { CreateBoardDto } from 'common/pm-communicator/dto/create-board.dto';
 import { Column, ColumnDocument } from '../schemas/column.schema';
-import { Task, TaskDocument } from '../schemas/task.schema';
 import { ColumnI } from 'common/pm-communicator/models/entities/column.interface';
 import { CreateTaskDto } from 'common/pm-communicator/dto/create-task.dto';
-import { TaskI } from 'common/pm-communicator/models/entities/task.interface';
 import { RpcException } from '@nestjs/microservices';
 
 @Injectable()
 export class BoardsService {
   constructor(
     @InjectModel(Board.name) private boardModel: Model<BoardDocument>,
-    @InjectModel(Column.name) private columnModel: Model<ColumnDocument>,
-    @InjectModel(Task.name) private taskModel: Model<TaskDocument>
+    @InjectModel(Column.name) private columnModel: Model<ColumnDocument>
   ) {}
 
   async get(filter: Record<string, any> = {}, projection: Record<string, any> = {}): Promise<BoardI[]> {
@@ -29,21 +26,9 @@ export class BoardsService {
   }
 
   async getColumns(boardId: string): Promise<ColumnI[]> {
-    const columns = await this.columnModel
+    return await this.columnModel
       .find({ boardId })
-      .lean();
-    const columnsIds = columns.map((col) => col._id.toString());
-
-    const tasks = await this.taskModel
-      .find({ columnId: { $in: columnsIds } })
-      .lean();
-
-    return columns.map((col) => {
-      return {
-        ...col,
-        tasks: tasks.filter((task) => task.columnId === col._id.toString())
-      }
-    }) as ColumnI[];
+      .lean() as ColumnI[];
   }
 
   async createColumns(boardId: string, columns: { name: string, order: number }[]): Promise<boolean> {
@@ -52,7 +37,7 @@ export class BoardsService {
     return true;
   }
 
-  async createTask(boardId: string, dto: CreateTaskDto): Promise<TaskI> {
+  async createTask(boardId: string, dto: CreateTaskDto): Promise<boolean> {
     const columns = await this.columnModel
       .find({ boardId }, { _id: 1 })
       .sort({ order: 1 })
@@ -69,12 +54,9 @@ export class BoardsService {
       });
     }
 
-    const task = new this.taskModel({
-      ...dto,
-      boardId,
-      columnId,
-    });
+    const newTask = { ...dto, boardId };
+    await this.columnModel.update({ _id: columnId }, { $push: { tasks: newTask } })
 
-    return (await task.save()) as TaskI;
+    return true;
   }
 }

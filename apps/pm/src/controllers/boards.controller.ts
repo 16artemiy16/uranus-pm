@@ -44,7 +44,7 @@ export class BoardsController {
   }
 
   @MessagePattern(BoardMsg.CreateTask)
-  createTask(req: ReqCreateTask): Promise<TaskI> {
+  createTask(req: ReqCreateTask): Promise<boolean> {
     const { boardId, dto } = req;
     return this.boardsService.createTask(boardId, dto);
   }
