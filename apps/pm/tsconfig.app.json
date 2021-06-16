@@ -4,6 +4,9 @@
     "declaration": false,
     "outDir": "../../dist/apps/pm"
   },
-  "include": ["src/**/*"],
+  "include": [
+    "src/**/*",
+    "../../libs/common/src/utils/array.utils.ts"
+  ],
   "exclude": ["node_modules", "dist", "test", "**/*spec.ts"]
 }

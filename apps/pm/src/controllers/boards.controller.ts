@@ -51,7 +51,7 @@ export class BoardsController {
 
   @MessagePattern(BoardMsg.MoveTask)
   moveTask(req: ReqMoveTask): Promise<boolean> {
-    const { taskId, toIndex, targetBoardId } = req;
-    return this.boardsService.moveTask(taskId, toIndex, targetBoardId);
+    const { taskId, toIndex, targetColumnId } = req;
+    return this.boardsService.moveTask(taskId, toIndex, targetColumnId);
   }
 }

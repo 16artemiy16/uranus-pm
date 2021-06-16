@@ -28,5 +28,5 @@ export type ReqCreateTask = {
 export type ReqMoveTask = {
   taskId: string;
   toIndex: number;
-  targetBoardId?: string;
+  targetColumnId?: string;
 };

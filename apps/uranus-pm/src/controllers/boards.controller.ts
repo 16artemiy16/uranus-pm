@@ -58,7 +58,7 @@ export class BoardsController {
     @Param('taskId') taskId: string,
     @Body() dto: MoveTaskDto,
   ): Observable<boolean> {
-    const { toIndex, targetBoardId } = dto;
-    return this.boardsFacade.moveTask(taskId, toIndex, targetBoardId);
+    const { toIndex, targetColumnId } = dto;
+    return this.boardsFacade.moveTask(taskId, toIndex, targetColumnId);
   }
 }

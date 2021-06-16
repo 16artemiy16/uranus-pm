@@ -8,6 +8,7 @@ import { Column, ColumnDocument } from '../schemas/column.schema';
 import { ColumnI } from 'common/pm-communicator/models/entities/column.interface';
 import { CreateTaskDto } from 'common/pm-communicator/dto/create-task.dto';
 import { RpcException } from '@nestjs/microservices';
+import { transferItem } from 'common/utils/array.utils';
 
 @Injectable()
 export class BoardsService {
@@ -60,7 +61,7 @@ export class BoardsService {
     return true;
   }
 
-  async moveTask(taskId: string, toIndex: number, targetBoardId?: string): Promise<boolean> {
+  async moveTask(taskId: string, toIndex: number, targetColumnId?: string): Promise<boolean> {
     const column = await this.columnModel
       .findOne({ 'tasks._id': taskId })
 
@@ -73,12 +74,25 @@ export class BoardsService {
 
     const task = column.tasks.find((item) => item._id.toString() === taskId);
 
-    column.tasks.splice(toIndex, 1, task, column.tasks[toIndex]);
-    column.tasks = column.tasks.filter((item, idx) => {
-      return !(item._id.toString() === task._id.toString() && idx !== toIndex);
-    });
+    if (targetColumnId) {
+      const targetColumn = await this.columnModel.findById(targetColumnId);
+      const taskToReplace = targetColumn.tasks[toIndex];
 
-    await column.save();
+      if (taskToReplace) {
+        targetColumn.tasks.splice(toIndex, 1, task, targetColumn.tasks[toIndex]);
+      } else {
+        targetColumn.tasks.splice(toIndex, 1, task);
+      }
+
+      column.tasks = column.tasks.filter((item) => item._id.toString() !== taskId);
+
+      await Promise.all([targetColumn.save(), column.save()]);
+    } else {
+      const taskIndex = column.tasks.findIndex((item) => item._id.toString() === taskId);
+      column.tasks = transferItem(column.tasks, taskIndex, toIndex);
+      await column.save();
+    }
+
     return true;
   }
 }

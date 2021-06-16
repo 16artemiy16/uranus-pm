@@ -5,5 +5,5 @@ export class MoveTaskDto {
   toIndex: number;
 
   @ApiProperty()
-  targetBoardId: string;
+  targetColumnId: string;
 }
