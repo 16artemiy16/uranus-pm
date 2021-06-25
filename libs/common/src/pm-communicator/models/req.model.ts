@@ -30,3 +30,8 @@ export type ReqMoveTask = {
   toIndex: number;
   targetColumnId?: string;
 };
+
+export type ReqAssignTask = {
+  taskId: string;
+  assigneeId: string;
+}

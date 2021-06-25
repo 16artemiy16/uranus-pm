@@ -95,4 +95,16 @@ export class BoardsService {
 
     return true;
   }
+
+  async assignTask(taskId: string, assigneeId: string): Promise<boolean> {
+    await this.columnModel
+      .updateOne(
+        { 'tasks._id': taskId },
+        { $set: { 'tasks.$.assigneeId': assigneeId } }
+        )
+      .lean()
+      .exec();
+
+    return true;
+  }
 }

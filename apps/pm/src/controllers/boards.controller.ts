@@ -2,6 +2,7 @@ import { Controller } from '@nestjs/common';
 import { MessagePattern } from '@nestjs/microservices';
 import { BoardsService } from '../services/boards.service';
 import {
+  ReqAssignTask,
   ReqCreate,
   ReqCreateColumns,
   ReqCreateTask,
@@ -53,5 +54,11 @@ export class BoardsController {
   moveTask(req: ReqMoveTask): Promise<boolean> {
     const { taskId, toIndex, targetColumnId } = req;
     return this.boardsService.moveTask(taskId, toIndex, targetColumnId);
+  }
+
+  @MessagePattern(BoardMsg.AssignTask)
+  assignTask(req: ReqAssignTask): Promise<boolean> {
+    const { taskId, assigneeId } = req;
+    return this.boardsService.assignTask(taskId, assigneeId);
   }
 }
