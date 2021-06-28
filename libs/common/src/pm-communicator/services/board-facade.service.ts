@@ -50,4 +50,8 @@ export class BoardFacadeService implements OnApplicationBootstrap {
   assignTask(taskId: string, assigneeId: string): Observable<boolean> {
     return this.pmClient.send(BoardMsg.AssignTask, { taskId, assigneeId });
   }
+
+  addMembers(boardId: string, members: string[]): Observable<boolean> {
+    return this.pmClient.send(BoardMsg.AddMembers, { boardId, members });
+  }
 }

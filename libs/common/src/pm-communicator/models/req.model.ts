@@ -35,3 +35,8 @@ export type ReqAssignTask = {
   taskId: string;
   assigneeId: string;
 };
+
+export type ReqAddMembers = {
+  boardId: string;
+  members: string[];
+};

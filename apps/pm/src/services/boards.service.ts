@@ -107,4 +107,17 @@ export class BoardsService {
 
     return true;
   }
+
+  async addMembers(boardId: string, members: string[]): Promise<boolean> {
+    const doesBoardExist = await this.boardModel.find({ _id: boardId }).count().lean().exec();
+    if (!doesBoardExist) {
+      throw new RpcException({
+        statusCode: 404,
+        message: 'boardDoesNotExist',
+      });
+    }
+
+    await this.boardModel.updateOne({ _id: boardId }, { $addToSet: { members } });
+    return true;
+  }
 }

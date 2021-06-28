@@ -9,4 +9,5 @@ export enum BoardMsg {
   CreateTask = 'board_task_create',
   MoveTask = 'board_move_task',
   AssignTask = 'board_assign_task',
+  AddMembers = 'board_add_members',
 }

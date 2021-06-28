@@ -10,6 +10,7 @@ import { ColumnI } from 'common/pm-communicator/models/entities/column.interface
 import { CreateColumnsDto } from 'common/pm-communicator/dto/create-columns.dto';
 import { CreateTaskDto } from 'common/pm-communicator/dto/create-task.dto';
 import { MoveTaskDto } from 'common/pm-communicator/dto/move-task.dto';
+import { AddMembersDto } from 'common/pm-communicator/dto/add-members.dto';
 
 @ApiTags('boards')
 @Controller('boards')
@@ -51,6 +52,11 @@ export class BoardsController {
   @Post(':boardId/task')
   createTask(@Param('boardId') boardId: string, @Body() dto: CreateTaskDto): Observable<boolean> {
     return this.boardsFacade.createTask(boardId, dto);
+  }
+
+  @Post(':boardId/members')
+  addMembers(@Param('boardId') boardId: string, @Body() dto: AddMembersDto) {
+    return this.boardsFacade.addMembers(boardId, dto.members);
   }
 
   @Put('task/:taskId/move')

@@ -13,6 +13,9 @@ export class Board {
 
   @Prop({ required: true })
   ownerId: string;
+
+  @Prop({ default: [] })
+  members: string[];
 }
 
 export const BoardSchema = SchemaFactory.createForClass(Board);

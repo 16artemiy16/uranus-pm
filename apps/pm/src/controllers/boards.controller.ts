@@ -2,13 +2,14 @@ import { Controller } from '@nestjs/common';
 import { MessagePattern } from '@nestjs/microservices';
 import { BoardsService } from '../services/boards.service';
 import {
+  ReqAddMembers,
   ReqAssignTask,
   ReqCreate,
   ReqCreateColumns,
   ReqCreateTask,
   ReqGet,
   ReqGetColumns,
-  ReqMoveTask
+  ReqMoveTask,
 } from 'common/pm-communicator/models/req.model';
 import { ResCreate, ResGet } from 'common/pm-communicator/models/res.model';
 import { BoardMsg } from 'common/pm-communicator/models/msg.model';
@@ -60,5 +61,11 @@ export class BoardsController {
   assignTask(req: ReqAssignTask): Promise<boolean> {
     const { taskId, assigneeId } = req;
     return this.boardsService.assignTask(taskId, assigneeId);
+  }
+
+  @MessagePattern(BoardMsg.AddMembers)
+  addMembers(req: ReqAddMembers): Promise<boolean> {
+    const { boardId, members } = req;
+    return this.boardsService.addMembers(boardId, members);
   }
 }
