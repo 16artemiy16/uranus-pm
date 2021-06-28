@@ -14,7 +14,6 @@ export class UsersService {
   ) {}
 
   async getAll(query: any = {}, projection: any = {}, options: QueryOptions = {}): Promise<UserI[]> {
-    console.log(query, typeof query )
     return await this.userModel.find(query, projection, options).lean().exec() as UserI[];
   }
 

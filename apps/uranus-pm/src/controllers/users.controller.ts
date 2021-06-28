@@ -15,6 +15,7 @@ import { UsersFacadeService } from 'common/users-communicator';
 import { UserI } from 'common/users-communicator/models/entities/user.interface';
 import { tap } from 'rxjs/operators';
 import { ApiBearerAuth, ApiOkResponse, ApiTags, ApiUnauthorizedResponse } from '@nestjs/swagger';
+import { CustomGet } from '../decorators/custom-get.decorator';
 
 @ApiTags('users')
 @Controller('users')
@@ -46,9 +47,9 @@ export class UsersController {
   @UseGuards(AuthGuard)
   @Post('get-custom')
   getAll(
-    @Body() body: { query?: any, projection?: any, options?: any }
+    @CustomGet() getOptions: any
   ): Observable<UserI[]> {
-    const { query, projection, options } = body;
+    const { query, projection, options } = getOptions;
     return this.usersFacade.getAll(query, projection, options);
   }
 
