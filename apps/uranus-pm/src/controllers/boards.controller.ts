@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, Put, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, NotFoundException, Param, Post, Put, UseGuards } from '@nestjs/common';
 import { BoardFacadeService } from 'common/pm-communicator/services/board-facade.service';
 import { AuthGuard } from '../guards/auth.guard';
 import { User } from '../decorators/user.decorator';
@@ -11,12 +11,16 @@ import { CreateColumnsDto } from 'common/pm-communicator/dto/create-columns.dto'
 import { CreateTaskDto } from 'common/pm-communicator/dto/create-task.dto';
 import { MoveTaskDto } from 'common/pm-communicator/dto/move-task.dto';
 import { AddMembersDto } from 'common/pm-communicator/dto/add-members.dto';
+import { UserI } from 'common/users-communicator/models/entities/user.interface';
+import { map, switchMap, tap } from 'rxjs/operators';
+import { UsersFacadeService } from 'common/users-communicator';
 
 @ApiTags('boards')
 @Controller('boards')
 export class BoardsController {
   constructor(
-    private readonly boardsFacade: BoardFacadeService
+    private readonly boardsFacade: BoardFacadeService,
+    private readonly usersFacade: UsersFacadeService
   ) {}
 
   @Get('owner/:ownerId')
@@ -54,8 +58,23 @@ export class BoardsController {
     return this.boardsFacade.createTask(boardId, dto);
   }
 
+  @Get(':boardId/members')
+  getMembers(@Param('boardId') boardId: string): Observable<UserI[]> {
+    return this.boardsFacade.get({ _id: boardId }).pipe(
+      map((boards) => boards[0]),
+      tap((board) => {
+        if (!board) {
+          throw new NotFoundException('boardDoesNotExist');
+        }
+      }),
+      switchMap((board) => {
+        return this.usersFacade.getAll({ _id: { $in: board.members } });
+      })
+    );
+  }
+
   @Post(':boardId/members')
-  addMembers(@Param('boardId') boardId: string, @Body() dto: AddMembersDto) {
+  addMembers(@Param('boardId') boardId: string, @Body() dto: AddMembersDto): Observable<boolean> {
     return this.boardsFacade.addMembers(boardId, dto.members);
   }
 
