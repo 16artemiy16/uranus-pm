@@ -6,6 +6,7 @@ import { AuthService } from '../services/auth.service';
 import { UserI } from 'common/users-communicator/models/entities/user.interface';
 import { CreateUserDto } from 'common/users-communicator/dto/create-user.dto';
 import { JwtUserType } from 'common/users-communicator/models/entities/jwt-user.type';
+import { QueryOptions } from 'mongoose';
 
 @Controller()
 export class UsersController {
@@ -15,8 +16,9 @@ export class UsersController {
   ) {}
 
   @MessagePattern(UsersMsg.GetAll)
-  getAll(): Promise<UserI[]> {
-    return this.usersService.getAll();
+  getAll(data: { query?: any, projection?: any, options?: QueryOptions }): Promise<UserI[]> {
+    const { query, projection, options } = data;
+    return this.usersService.getAll(query, projection, options);
   }
 
   @MessagePattern(UsersMsg.Create)

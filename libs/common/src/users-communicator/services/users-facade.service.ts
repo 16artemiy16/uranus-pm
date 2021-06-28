@@ -6,6 +6,7 @@ import { UserI } from 'common/users-communicator/models/entities/user.interface'
 import { CreateUserDto } from 'common/users-communicator/dto/create-user.dto';
 import { UsersMsg } from 'common/users-communicator/models/msg.model';
 import { JwtUserType } from 'common/users-communicator/models/entities/jwt-user.type';
+import { QueryOptions } from 'mongoose';
 
 @Injectable()
 export class UsersFacadeService implements OnApplicationBootstrap {
@@ -17,8 +18,8 @@ export class UsersFacadeService implements OnApplicationBootstrap {
     await this.usersClient.connect();
   }
 
-  getAll(): Observable<UserI[]> {
-    return this.usersClient.send(UsersMsg.GetAll, '');
+  getAll(query: any, projection: any = {}, options: QueryOptions = {}): Observable<UserI[]> {
+    return this.usersClient.send(UsersMsg.GetAll, { query, projection, options });
   }
 
   create(data: CreateUserDto): Observable<boolean> {

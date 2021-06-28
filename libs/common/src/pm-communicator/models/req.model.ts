@@ -34,4 +34,4 @@ export type ReqMoveTask = {
 export type ReqAssignTask = {
   taskId: string;
   assigneeId: string;
-}
+};

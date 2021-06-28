@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { User, UserDocument } from '../schemas/user.schema';
-import { Model } from 'mongoose';
+import { Model, QueryOptions } from 'mongoose';
 import { CreateUserDto } from 'common/users-communicator/dto/create-user.dto';
 import { UserI } from 'common/users-communicator/models/entities/user.interface';
 import * as bcrypt from 'bcrypt';
@@ -13,8 +13,9 @@ export class UsersService {
     @InjectModel(User.name) private userModel: Model<UserDocument>,
   ) {}
 
-  async getAll(): Promise<UserI[]> {
-    return await this.userModel.find().lean() as UserI[];
+  async getAll(query: any = {}, projection: any = {}, options: QueryOptions = {}): Promise<UserI[]> {
+    console.log(query, typeof query )
+    return await this.userModel.find(query, projection, options).lean().exec() as UserI[];
   }
 
   async find(filter = {}, projection = {}): Promise<UserI[]> {

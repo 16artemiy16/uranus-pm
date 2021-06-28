@@ -44,9 +44,12 @@ export class UsersController {
 
   @ApiBearerAuth()
   @UseGuards(AuthGuard)
-  @Get()
-  getAll(): Observable<UserI[]> {
-    return this.usersFacade.getAll();
+  @Post('get-custom')
+  getAll(
+    @Body() body: { query?: any, projection?: any, options?: any }
+  ): Observable<UserI[]> {
+    const { query, projection, options } = body;
+    return this.usersFacade.getAll(query, projection, options);
   }
 
   @Post()
