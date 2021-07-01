@@ -9,6 +9,8 @@ import { ColumnI } from 'common/pm-communicator/models/entities/column.interface
 import { CreateTaskDto } from 'common/pm-communicator/dto/create-task.dto';
 import { RpcException } from '@nestjs/microservices';
 import { transferItem } from 'common/utils/array.utils';
+import { BoardUserRoleEnum } from 'common/pm-communicator/models/entities/board-user-role.enum';
+import { BoardUserStatusEnum } from 'common/pm-communicator/models/entities/board-user-status.enum';
 
 @Injectable()
 export class BoardsService {
@@ -117,7 +119,18 @@ export class BoardsService {
       });
     }
 
-    await this.boardModel.updateOne({ _id: boardId }, { $addToSet: { members } });
+    await this.boardModel.updateOne(
+      { _id: boardId },
+      {
+        $addToSet: {
+          members: members.map((userId) => ({
+            userId,
+            role: BoardUserRoleEnum.User,
+            status: BoardUserStatusEnum.Invited
+          }))
+        }
+      }
+    );
     return true;
   }
 }

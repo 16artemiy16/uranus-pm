@@ -14,6 +14,7 @@ import { AddMembersDto } from 'common/pm-communicator/dto/add-members.dto';
 import { UserI } from 'common/users-communicator/models/entities/user.interface';
 import { map, switchMap, tap } from 'rxjs/operators';
 import { UsersFacadeService } from 'common/users-communicator';
+import { Types } from 'mongoose';
 
 @ApiTags('boards')
 @Controller('boards')
@@ -67,8 +68,19 @@ export class BoardsController {
           throw new NotFoundException('boardDoesNotExist');
         }
       }),
+      // TODO: refactor  creating UserFacade.aggregate() function
       switchMap((board) => {
-        return this.usersFacade.getAll({ _id: { $in: board.members } });
+        const membersIds = board.members.map((member) => Types.ObjectId(member.userId));
+        return this.usersFacade
+          .getAll({ _id: { $in: membersIds } })
+          .pipe(
+            map((users) => {
+              return users.map((user) => {
+                const { status, role } = board.members.find((item) => item.userId === user._id.toString());
+                return { ...user, status, role };
+              })
+            })
+          );
       })
     );
   }

@@ -1,5 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
+import { BoardMemberSchema } from './board-member.schema';
+import { BoardMemberI } from 'common/pm-communicator/models/entities/board-member.interface';
 
 export type BoardDocument = Board & Document;
 
@@ -14,8 +16,8 @@ export class Board {
   @Prop({ required: true })
   ownerId: string;
 
-  @Prop({ default: [] })
-  members: string[];
+  @Prop({ default: [], type: [BoardMemberSchema] })
+  members: BoardMemberI[];
 }
 
 export const BoardSchema = SchemaFactory.createForClass(Board);

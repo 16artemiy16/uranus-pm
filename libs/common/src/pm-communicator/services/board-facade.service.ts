@@ -6,7 +6,6 @@ import { Observable } from 'rxjs';
 import { BoardI } from 'common/pm-communicator/models/entities/board.interface';
 import { CreateBoardDto } from 'common/pm-communicator/dto/create-board.dto';
 import { CreateTaskDto } from 'common/pm-communicator/dto/create-task.dto';
-import { TaskI } from 'common/pm-communicator/models/entities/task.interface';
 
 @Injectable()
 export class BoardFacadeService implements OnApplicationBootstrap {
