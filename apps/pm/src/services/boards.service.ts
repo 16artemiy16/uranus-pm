@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Board, BoardDocument } from '../schemas/board.schema';
-import { Model } from 'mongoose';
+import { Model, Types } from 'mongoose';
 import { BoardI } from 'common/pm-communicator/models/entities/board.interface';
 import { CreateBoardDto } from 'common/pm-communicator/dto/create-board.dto';
 import { Column, ColumnDocument } from '../schemas/column.schema';
@@ -131,6 +131,27 @@ export class BoardsService {
         }
       }
     );
+
+    return true;
+  }
+
+  async removeMembers(boardId: string, members: string[]): Promise<boolean> {
+    const board = await this.boardModel.findOne({ _id: boardId }).exec();
+
+    if (!board) {
+      throw new RpcException({
+        statusCode: 404,
+        message: 'boardDoesNotExist',
+      });
+    }
+
+    const memberIdsForRemoving = board.members
+      .map(({ userId }) => userId)
+      .filter((userId) => members.includes(userId));
+
+    board.members = board.members.filter((member) => !memberIdsForRemoving.includes(member.userId));
+    await board.save();
+
     return true;
   }
 }

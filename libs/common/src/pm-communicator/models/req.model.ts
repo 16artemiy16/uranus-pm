@@ -40,3 +40,8 @@ export type ReqAddMembers = {
   boardId: string;
   members: string[];
 };
+
+export type ReqRemoveMembers = {
+  boardId: string;
+  members: string[];
+};

@@ -53,4 +53,8 @@ export class BoardFacadeService implements OnApplicationBootstrap {
   addMembers(boardId: string, members: string[]): Observable<boolean> {
     return this.pmClient.send(BoardMsg.AddMembers, { boardId, members });
   }
+
+  removeMembers(boardId: string, members: string[]): Observable<boolean> {
+    return this.pmClient.send(BoardMsg.RemoveMembers, { boardId, members });
+  }
 }

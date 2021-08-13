@@ -1,4 +1,4 @@
-import { Body, Controller, Get, NotFoundException, Param, Post, Put, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, NotFoundException, Param, Post, Put, UseGuards } from '@nestjs/common';
 import { BoardFacadeService } from 'common/pm-communicator/services/board-facade.service';
 import { AuthGuard } from '../guards/auth.guard';
 import { User } from '../decorators/user.decorator';
@@ -15,6 +15,7 @@ import { UserI } from 'common/users-communicator/models/entities/user.interface'
 import { map, switchMap, tap } from 'rxjs/operators';
 import { UsersFacadeService } from 'common/users-communicator';
 import { Types } from 'mongoose';
+import { RemoveMembersDto } from 'common/pm-communicator/dto/remove-members.dto';
 
 @ApiTags('boards')
 @Controller('boards')
@@ -87,7 +88,16 @@ export class BoardsController {
 
   @Post(':boardId/members')
   addMembers(@Param('boardId') boardId: string, @Body() dto: AddMembersDto): Observable<boolean> {
-    return this.boardsFacade.addMembers(boardId, dto.members);
+    try {
+      return this.boardsFacade.addMembers(boardId, dto.members);
+    } catch (err) {
+      return { err: err.toLocaleString() } as any;
+    }
+  }
+
+  @Delete(':boardId/members')
+  removeMembers(@Param('boardId') boardId: string, @Body() dto: RemoveMembersDto): Observable<boolean> {
+    return this.boardsFacade.removeMembers(boardId, dto.members);
   }
 
   @Put('task/:taskId/move')

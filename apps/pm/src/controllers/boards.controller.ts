@@ -10,6 +10,7 @@ import {
   ReqGet,
   ReqGetColumns,
   ReqMoveTask,
+  ReqRemoveMembers,
 } from 'common/pm-communicator/models/req.model';
 import { ResCreate, ResGet } from 'common/pm-communicator/models/res.model';
 import { BoardMsg } from 'common/pm-communicator/models/msg.model';
@@ -67,5 +68,11 @@ export class BoardsController {
   addMembers(req: ReqAddMembers): Promise<boolean> {
     const { boardId, members } = req;
     return this.boardsService.addMembers(boardId, members);
+  }
+
+  @MessagePattern(BoardMsg.RemoveMembers)
+  removeMembers(req: ReqRemoveMembers): Promise<boolean> {
+    const { boardId, members } = req;
+    return this.boardsService.removeMembers(boardId, members);
   }
 }
