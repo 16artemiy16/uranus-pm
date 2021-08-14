@@ -95,7 +95,7 @@ export class BoardsController {
     }
   }
 
-  @Delete(':boardId/members')
+  @Post(':boardId/members/delete')
   removeMembers(@Param('boardId') boardId: string, @Body() dto: RemoveMembersDto): Observable<boolean> {
     return this.boardsFacade.removeMembers(boardId, dto.members);
   }
