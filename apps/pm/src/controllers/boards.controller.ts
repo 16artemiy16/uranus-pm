@@ -60,8 +60,8 @@ export class BoardsController {
 
   @MessagePattern(BoardMsg.AssignTask)
   assignTask(req: ReqAssignTask): Promise<boolean> {
-    const { taskId, assigneeId } = req;
-    return this.boardsService.assignTask(taskId, assigneeId);
+    const { taskId, assignee } = req;
+    return this.boardsService.assignTask(taskId, assignee);
   }
 
   @MessagePattern(BoardMsg.AddMembers)

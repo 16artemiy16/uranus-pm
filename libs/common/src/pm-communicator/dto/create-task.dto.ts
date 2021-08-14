@@ -12,5 +12,5 @@ export class CreateTaskDto {
 
   @ApiProperty()
   @Prop()
-  assigneeId?: string;
+  assignee?: string;
 }

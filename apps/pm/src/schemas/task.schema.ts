@@ -15,7 +15,7 @@ export class Task {
   boardId: string;
 
   @Prop()
-  assigneeId: string;
+  assignee: string;
 }
 
 export const TaskSchema = SchemaFactory.createForClass(Task);

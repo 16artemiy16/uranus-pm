@@ -16,6 +16,7 @@ import { map, switchMap, tap } from 'rxjs/operators';
 import { UsersFacadeService } from 'common/users-communicator';
 import { Types } from 'mongoose';
 import { RemoveMembersDto } from 'common/pm-communicator/dto/remove-members.dto';
+import { AssignTaskDto } from 'common/pm-communicator/dto/assign-task.dto';
 
 @ApiTags('boards')
 @Controller('boards')
@@ -112,8 +113,9 @@ export class BoardsController {
   @Post('task/:taskId/assignee')
   assignTask(
     @Param('taskId') taskId: string,
-    @Body('assigneeId') assigneeId: string
+    @Body() dto: AssignTaskDto,
   ): Observable<boolean> {
-    return this.boardsFacade.assignTask(taskId, assigneeId);
+    const { assignee } = dto;
+    return this.boardsFacade.assignTask(taskId, assignee);
   }
 }

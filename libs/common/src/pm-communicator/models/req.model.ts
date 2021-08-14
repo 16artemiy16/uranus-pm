@@ -33,7 +33,7 @@ export type ReqMoveTask = {
 
 export type ReqAssignTask = {
   taskId: string;
-  assigneeId: string;
+  assignee: string;
 };
 
 export type ReqAddMembers = {
