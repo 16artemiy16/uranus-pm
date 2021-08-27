@@ -1,7 +1,8 @@
 export enum UsersMsg {
-  GetAll = 'get_all',
-  Create = 'create',
-  Login = 'login',
-  Verify = 'verify',
-  EmailIsFree = 'email_is_free',
+  Ping = 'users_ping',
+  GetAll = 'users_get_all',
+  Create = 'users_create',
+  Login = 'users_login',
+  Verify = 'users_verify',
+  EmailIsFree = 'users_email_is_free',
 }

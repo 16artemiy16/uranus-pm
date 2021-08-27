@@ -22,6 +22,11 @@ export class BoardsController {
     private readonly boardsService: BoardsService
   ) {}
 
+  @MessagePattern(BoardMsg.Ping)
+  ping(): string {
+    return 'PM - pong';
+  }
+
   @MessagePattern(BoardMsg.Get)
   get(req: ReqGet): Promise<ResGet> {
     const { filter = {}, projection = {} } = req;

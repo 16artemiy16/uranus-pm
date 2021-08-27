@@ -9,6 +9,6 @@ export class AnalyticsController {
 
   @MessagePattern(AnalyticsMsg.Ping)
   ping(): string {
-    return 'pong';
+    return 'Analytics - pong';
   }
 }

@@ -15,6 +15,11 @@ export class UsersController {
     private readonly authService: AuthService,
   ) {}
 
+  @MessagePattern(UsersMsg.Ping)
+  ping(): string {
+    return 'Users - pong';
+  }
+
   @MessagePattern(UsersMsg.GetAll)
   getAll(data: { query?: any, projection?: any, options?: QueryOptions }): Promise<UserI[]> {
     const { query, projection, options } = data;

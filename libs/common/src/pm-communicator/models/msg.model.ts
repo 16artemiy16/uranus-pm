@@ -1,4 +1,5 @@
 export enum BoardMsg {
+  Ping = 'pm_ping',
   Get = 'board_get',
   GetMy = 'board_get_my',
   GetAll = 'board_get_all',

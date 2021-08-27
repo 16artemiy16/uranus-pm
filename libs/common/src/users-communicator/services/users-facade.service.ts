@@ -18,6 +18,10 @@ export class UsersFacadeService implements OnApplicationBootstrap {
     await this.usersClient.connect();
   }
 
+  ping(): Observable<string> {
+    return this.usersClient.send(UsersMsg.Ping, '');
+  }
+
   getAll(query: any, projection: any = {}, options: QueryOptions = {}): Observable<UserI[]> {
     return this.usersClient.send(UsersMsg.GetAll, { query, projection, options });
   }

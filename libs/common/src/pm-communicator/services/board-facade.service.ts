@@ -17,6 +17,10 @@ export class BoardFacadeService implements OnApplicationBootstrap {
     await this.pmClient.connect();
   }
 
+  ping(): Observable<string> {
+    return this.pmClient.send(BoardMsg.Ping, '');
+  }
+
   get(filter: Record<string, any> = {}, projection: Record<string, any> = {}): Observable<BoardI[]> {
     return this.pmClient.send(BoardMsg.Get, { filter, projection });
   }
