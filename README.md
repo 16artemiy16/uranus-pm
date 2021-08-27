@@ -35,6 +35,9 @@ $ npm run start:dev users
 # run project management microservice
 $ npm run start:dev pm
 
+# run analytics microservice
+$ npm run start:dev analytics
+
 # run common library
 $ npm run start:dev common
 ```

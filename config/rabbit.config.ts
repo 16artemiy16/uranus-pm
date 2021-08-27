@@ -11,4 +11,10 @@ export default {
       queue: 'uranus_pm_queue',
     },
   },
+  analytics: {
+    options: {
+      urls: ['amqp://localhost:5672'],
+      queue: 'uranus_analytics_queue',
+    },
+  },
 };

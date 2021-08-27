@@ -5,9 +5,14 @@ import { UsersCommunicatorModule } from 'common/users-communicator';
 import { UsersController } from './controllers/users.controller';
 import { PmCommunicatorModule } from 'common/pm-communicator';
 import { BoardsController } from './controllers/boards.controller';
+import { AnalyticsCommunicatorModule } from 'common/analytics-communicator';
 
 @Module({
-  imports: [UsersCommunicatorModule, PmCommunicatorModule],
+  imports: [
+    UsersCommunicatorModule,
+    PmCommunicatorModule,
+    AnalyticsCommunicatorModule,
+  ],
   controllers: [
     AppController,
     UsersController,

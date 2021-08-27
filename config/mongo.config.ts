@@ -5,4 +5,7 @@ export default {
   pm: {
     connection: 'mongodb://localhost:27017/uranus-pm',
   },
+  analytics: {
+    connection: 'mongodb://localhost:27017/uranus-analytics',
+  },
 };
