@@ -18,7 +18,7 @@ export class AnalyticsFacadeService implements OnApplicationBootstrap {
     return this.analyticsClient.send(AnalyticsMsg.Ping, '');
   }
 
-  traceUserEvent(user, action): Observable<any> {
-    return this.analyticsClient.send(AnalyticsMsg.TraceUserEvent, { user, action });
+  traceUserEvent(user: string, action: string, data?: any): Observable<any> {
+    return this.analyticsClient.send(AnalyticsMsg.TraceUserEvent, { user, action, data });
   }
 }

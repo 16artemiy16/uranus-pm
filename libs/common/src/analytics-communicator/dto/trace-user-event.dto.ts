@@ -5,14 +5,6 @@ import { ApiModelProperty } from '@nestjs/swagger/dist/decorators/api-model-prop
 export class TraceUserEventDto {
   @ApiProperty()
   @ApiModelProperty({
-    type: 'string',
-    description: 'Tracing action user id',
-  })
-  @IsNotEmpty()
-  user: string;
-
-  @ApiProperty()
-  @ApiModelProperty({
     enum: ['visit', 'test'],
     type: 'string',
     description: 'Tracing action name',
@@ -20,4 +12,10 @@ export class TraceUserEventDto {
   @IsNotEmpty()
   @IsEnum(['visit', 'test'])
   action: string;
+
+  @ApiProperty()
+  @ApiModelProperty({
+    description: 'Additional action data',
+  })
+  data?: any;
 }

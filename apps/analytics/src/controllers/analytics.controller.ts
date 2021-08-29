@@ -2,7 +2,7 @@ import { Controller } from '@nestjs/common';
 import { AnalyticsService } from '../services/analytics.service';
 import { MessagePattern } from '@nestjs/microservices';
 import { AnalyticsMsg } from 'common/analytics-communicator/models/msg.model';
-import { TraceUserEventDto } from 'common/analytics-communicator/dto/trace-user-event.dto';
+import { TraceUserEvent } from 'common/analytics-communicator/models/req.model';
 
 @Controller()
 export class AnalyticsController {
@@ -14,8 +14,8 @@ export class AnalyticsController {
   }
 
   @MessagePattern(AnalyticsMsg.TraceUserEvent)
-  traceUserEvent(event: TraceUserEventDto): Promise<any> {
-    const { user, action } = event;
-    return this.analyticsService.traceUserEvent(user, action);
+  traceUserEvent(event: TraceUserEvent): Promise<any> {
+    const { user, action, data } = event;
+    return this.analyticsService.traceUserEvent(user, action, data);
   }
 }

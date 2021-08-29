@@ -22,7 +22,7 @@ export class UserAction {
   @Prop({
     type: Object,
   })
-  params: any;
+  data: any;
 }
 
 export const UserActionSchema = SchemaFactory.createForClass(UserAction);

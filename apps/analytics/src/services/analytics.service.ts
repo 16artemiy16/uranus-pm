@@ -9,10 +9,11 @@ export class AnalyticsService {
     @InjectModel(UserAction.name) private readonly userActionModel: Model<UserActionDocument>
   ) {}
 
-  traceUserEvent(user: string, action: string): Promise<any> {
+  traceUserEvent(user: string, action: string, data?: any): Promise<any> {
     return this.userActionModel.create({
       user,
       action,
+      ...(data && { data }),
     });
   }
 }
