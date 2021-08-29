@@ -1,8 +1,18 @@
 import { Injectable } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
+import { UserAction, UserActionDocument } from '../schemas/user-action.schema';
+import { Model } from 'mongoose';
 
 @Injectable()
 export class AnalyticsService {
-  getHello(): string {
-    return 'Hello World!';
+  constructor(
+    @InjectModel(UserAction.name) private readonly userActionModel: Model<UserActionDocument>
+  ) {}
+
+  traceUserEvent(user: string, action: string): Promise<any> {
+    return this.userActionModel.create({
+      user,
+      action,
+    });
   }
 }

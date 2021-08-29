@@ -6,6 +6,7 @@ import { UsersController } from './controllers/users.controller';
 import { PmCommunicatorModule } from 'common/pm-communicator';
 import { BoardsController } from './controllers/boards.controller';
 import { AnalyticsCommunicatorModule } from 'common/analytics-communicator';
+import { AnalyticsController } from './controllers/analytics.controller';
 
 @Module({
   imports: [
@@ -16,7 +17,8 @@ import { AnalyticsCommunicatorModule } from 'common/analytics-communicator';
   controllers: [
     AppController,
     UsersController,
-    BoardsController
+    BoardsController,
+    AnalyticsController
   ],
   providers: [AppService],
 })
