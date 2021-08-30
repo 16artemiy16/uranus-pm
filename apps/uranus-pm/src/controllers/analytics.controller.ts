@@ -4,12 +4,15 @@ import { TraceUserEventDto } from 'common/analytics-communicator/dto/trace-user-
 import { AuthGuard } from '../guards/auth.guard';
 import { User } from '../decorators/user.decorator';
 import { ApiBearerAuth } from '@nestjs/swagger';
-import { switchMap } from 'rxjs/operators';
+import { map, switchMap } from 'rxjs/operators';
+import { BoardFacadeService } from 'common/pm-communicator/services/board-facade.service';
+import { Types } from 'mongoose';
 
 @Controller('analytics')
 export class AnalyticsController {
   constructor(
-    private readonly analyticsFacade: AnalyticsFacadeService
+    private readonly analyticsFacade: AnalyticsFacadeService,
+    private readonly boardsFacade: BoardFacadeService,
   ) {}
 
   @ApiBearerAuth()
@@ -24,6 +27,19 @@ export class AnalyticsController {
   @UseGuards(AuthGuard)
   @Get('user/favourite/boards')
   getUserFavouriteBoards(@Query('limit') limit: number, @User('_id') userId: string) {
-    return this.analyticsFacade.getUserFavouriteBoards(userId, limit || 5);
+    return this.analyticsFacade.getUserFavouriteBoards(userId, limit || 5).pipe(
+      switchMap((boardsStats) => {
+        const boardsIds = boardsStats.map(({ board }) => Types.ObjectId(board));
+        return this.boardsFacade.get({ _id: { $in: boardsIds } }, { name: 1 }).pipe(
+          map((boards) => ({ boards, boardsStats }))
+        )
+      }),
+      map(({ boards, boardsStats }) => {
+        return boardsStats.map((stats) => {
+          const board = boards.find(({ _id }) => _id.toString() === stats.board);
+          return { ...board };
+        });
+      }),
+    );
   }
 }
