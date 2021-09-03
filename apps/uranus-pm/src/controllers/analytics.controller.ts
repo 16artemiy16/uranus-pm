@@ -42,4 +42,11 @@ export class AnalyticsController {
       }),
     );
   }
+
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard)
+  @Get('user/favourite/tasks')
+  getUserFavouriteTasks(@Query('limit') limit: number, @User('_id') userId: string) {
+    return this.analyticsFacade.getUserFavouriteTasks(userId, limit || 5);
+  }
 }

@@ -2,8 +2,12 @@ import { Controller } from '@nestjs/common';
 import { AnalyticsService } from '../services/analytics.service';
 import { MessagePattern } from '@nestjs/microservices';
 import { AnalyticsMsg } from 'common/analytics-communicator/models/msg.model';
-import { ReqGetUserFavouriteBoards, ReqTraceUserEvent } from 'common/analytics-communicator/models/req.model';
-import { ResGetUserFavouriteBoards } from 'common/analytics-communicator/models/res.model';
+import {
+  ReqGetUserFavouriteBoards,
+  ReqGetUserFavouriteTasks,
+  ReqTraceUserEvent
+} from 'common/analytics-communicator/models/req.model';
+import { ResGetUserFavouriteBoards, ResGetUserFavouriteTasks } from 'common/analytics-communicator/models/res.model';
 
 @Controller()
 export class AnalyticsController {
@@ -24,5 +28,11 @@ export class AnalyticsController {
   getUserFavouriteBoards(req: ReqGetUserFavouriteBoards): Promise<ResGetUserFavouriteBoards> {
     const { user, limit } = req;
     return this.analyticsService.getUserFavouriteBoards(user, limit);
+  }
+
+  @MessagePattern(AnalyticsMsg.GetUserFavouriteTasks)
+  getUserFavouriteTasks(req: ReqGetUserFavouriteTasks): Promise<ResGetUserFavouriteTasks> {
+    const { user, limit } = req;
+    return this.analyticsService.getUserFavouriteTasks(user, limit);
   }
 }

@@ -3,7 +3,7 @@ import { ANALYTICS_SERVICE } from 'common/analytics-communicator/constants';
 import { ClientProxy } from '@nestjs/microservices';
 import { AnalyticsMsg } from 'common/analytics-communicator/models/msg.model';
 import { Observable } from 'rxjs';
-import { ResGetUserFavouriteBoards } from 'common/analytics-communicator/models/res.model';
+import { ResGetUserFavouriteBoards, ResGetUserFavouriteTasks } from 'common/analytics-communicator/models/res.model';
 
 @Injectable()
 export class AnalyticsFacadeService implements OnApplicationBootstrap {
@@ -25,5 +25,9 @@ export class AnalyticsFacadeService implements OnApplicationBootstrap {
 
   getUserFavouriteBoards(user: string, limit?: number): Observable<ResGetUserFavouriteBoards> {
     return this.analyticsClient.send(AnalyticsMsg.GetUserFavouriteBoards, { user, limit });
+  }
+
+  getUserFavouriteTasks(user: string, limit?: number): Observable<ResGetUserFavouriteTasks> {
+    return this.analyticsClient.send(AnalyticsMsg.GetUserFavouriteTasks, { user, limit })
   }
 }
