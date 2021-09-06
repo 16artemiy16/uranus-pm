@@ -34,6 +34,10 @@ export class BoardsService {
       .lean() as ColumnI[];
   }
 
+  async aggregateColumns(aggregation: Record<string, any>[]): Promise<any> {
+    return await this.columnModel.aggregate(aggregation).exec();
+  }
+
   async createColumns(boardId: string, columns: { name: string, order: number }[]): Promise<boolean> {
     const newColumns = columns.map(({ name, order }) => ({ name, order, boardId }));
     await this.columnModel.insertMany(newColumns);

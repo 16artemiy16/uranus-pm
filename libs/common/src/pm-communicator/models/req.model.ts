@@ -15,6 +15,10 @@ export type ReqGetColumns = {
   boardId: string;
 };
 
+export type ReqAggregateColumns = {
+  aggregation: Record<string, any>[];
+};
+
 export type ReqCreateColumns = {
   boardId: string;
   columns: { name: string; order: number }[];

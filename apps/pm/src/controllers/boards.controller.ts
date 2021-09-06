@@ -3,6 +3,7 @@ import { MessagePattern } from '@nestjs/microservices';
 import { BoardsService } from '../services/boards.service';
 import {
   ReqAddMembers,
+  ReqAggregateColumns,
   ReqAssignTask,
   ReqCreate,
   ReqCreateColumns,
@@ -43,6 +44,12 @@ export class BoardsController {
   getColumns(req: ReqGetColumns): Promise<ColumnI[]> {
     const { boardId } = req;
     return this.boardsService.getColumns(boardId);
+  }
+
+  @MessagePattern(BoardMsg.AggregateColumns)
+  aggregateColumns(req: ReqAggregateColumns): Promise<any> {
+    const { aggregation } = req;
+    return this.boardsService.aggregateColumns(aggregation);
   }
 
   @MessagePattern(BoardMsg.CreateColumns)

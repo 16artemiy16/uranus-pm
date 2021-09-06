@@ -47,6 +47,27 @@ export class AnalyticsController {
   @UseGuards(AuthGuard)
   @Get('user/favourite/tasks')
   getUserFavouriteTasks(@Query('limit') limit: number, @User('_id') userId: string) {
-    return this.analyticsFacade.getUserFavouriteTasks(userId, limit || 5);
+    return this.analyticsFacade.getUserFavouriteTasks(userId, limit || 5).pipe(
+      switchMap((tasksStats) => {
+        const tasksIds = tasksStats.map(({ task }) => task);
+
+        return this.boardsFacade.aggregateColumns([
+          { $unwind: '$tasks' },
+          { $project: {
+            _id: { $toString: '$tasks._id'},
+              title: '$tasks.title',
+          } },
+          { $match: { _id: { $in: tasksIds } } }
+        ]).pipe(
+          map((tasks) => ({ tasksStats, tasks }))
+        )
+      }),
+      map(({ tasksStats, tasks }) => {
+        return tasksStats.map((stats) => {
+          const task = tasks.find(({ _id }) => _id === stats.task);
+          return { ...task };
+        });
+      })
+    );
   }
 }
