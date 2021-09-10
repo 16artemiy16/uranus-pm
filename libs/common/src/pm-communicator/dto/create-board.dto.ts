@@ -4,6 +4,10 @@ import { ApiProperty } from '@nestjs/swagger';
 export class CreateBoardDto {
   @ApiProperty()
   @IsNotEmpty()
+  key: string;
+
+  @ApiProperty()
+  @IsNotEmpty()
   name: string;
 
   @ApiProperty()
