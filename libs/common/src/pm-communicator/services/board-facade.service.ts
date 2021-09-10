@@ -6,8 +6,6 @@ import { Observable } from 'rxjs';
 import { BoardI } from 'common/pm-communicator/models/entities/board.interface';
 import { CreateBoardDto } from 'common/pm-communicator/dto/create-board.dto';
 import { CreateTaskDto } from 'common/pm-communicator/dto/create-task.dto';
-import { TaskI } from 'common/pm-communicator/models/entities/task.interface';
-import { ColumnI } from 'common/pm-communicator/models/entities/column.interface';
 
 @Injectable()
 export class BoardFacadeService implements OnApplicationBootstrap {
@@ -25,6 +23,10 @@ export class BoardFacadeService implements OnApplicationBootstrap {
 
   get(filter: Record<string, any> = {}, projection: Record<string, any> = {}): Observable<BoardI[]> {
     return this.pmClient.send(BoardMsg.Get, { filter, projection });
+  }
+
+  aggregate(aggregation: Record<string, any>[]) {
+    return this.pmClient.send(BoardMsg.Aggregate, { aggregation });
   }
 
   getByOwner(ownerId: string, projection: Record<string, any> = {}): Observable<BoardI[]> {

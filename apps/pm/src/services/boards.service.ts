@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Board, BoardDocument } from '../schemas/board.schema';
-import { Model, Types } from 'mongoose';
+import { Model } from 'mongoose';
 import { BoardI } from 'common/pm-communicator/models/entities/board.interface';
 import { CreateBoardDto } from 'common/pm-communicator/dto/create-board.dto';
 import { Column, ColumnDocument } from '../schemas/column.schema';
@@ -21,6 +21,10 @@ export class BoardsService {
 
   async get(filter: Record<string, any> = {}, projection: Record<string, any> = {}): Promise<BoardI[]> {
     return await this.boardModel.find(filter, projection).lean() as BoardI[];
+  }
+
+  aggregate(aggregation: Record<string, any>[]): Promise<any> {
+    return this.boardModel.aggregate(aggregation).exec();
   }
 
   create(userId: string, dto: CreateBoardDto): Promise<BoardDocument> {

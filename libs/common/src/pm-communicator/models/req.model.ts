@@ -6,6 +6,10 @@ export type ReqGet = {
   projection?: Record<string, any>;
 };
 
+export type ReqAggregate = {
+  aggregation: Record<string, any>[];
+};
+
 export type ReqCreate = {
   userId: string;
   dto: CreateBoardDto;
