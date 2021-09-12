@@ -28,7 +28,8 @@ export class BoardsService {
   }
 
   create(userId: string, dto: CreateBoardDto): Promise<BoardDocument> {
-    const board = new this.boardModel({ ...dto, ownerId: userId });
+    const { key } = dto;
+    const board = new this.boardModel({ ...dto, key: key.toUpperCase(), ownerId: userId });
     return board.save();
   }
 
