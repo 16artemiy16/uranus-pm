@@ -27,10 +27,21 @@ export class BoardsService {
     return this.boardModel.aggregate(aggregation).exec();
   }
 
-  create(userId: string, dto: CreateBoardDto): Promise<BoardDocument> {
+  async create(userId: string, dto: CreateBoardDto): Promise<BoardDocument> {
     const { key } = dto;
     const board = new this.boardModel({ ...dto, key: key.toUpperCase(), ownerId: userId });
-    return board.save();
+    const savedBoard = await board.save();
+
+    const SCRUM_COLUMNS = [
+      { name: 'Todo', order: 0 },
+      { name: 'In Progress', order: 1 },
+      { name: 'Review', order: 2 },
+      { name: 'Done', order: 3 },
+    ];
+
+    await this.createColumns(savedBoard._id, SCRUM_COLUMNS);
+
+    return savedBoard;
   }
 
   async getColumns(boardId: string): Promise<ColumnI[]> {
