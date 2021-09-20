@@ -5,4 +5,5 @@ export enum UsersMsg {
   Login = 'users_login',
   Verify = 'users_verify',
   EmailIsFree = 'users_email_is_free',
+  FavouriteToggleBoard = 'users_favourite_toggle_boards',
 }

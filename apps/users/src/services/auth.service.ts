@@ -29,4 +29,8 @@ export class AuthService {
   async isEmailFree(email: string): Promise<boolean> {
     return await this.usersService.count({ email }) === 0;
   }
+
+  async toggleFavouriteBoard(boardId: string, userId: string): Promise<boolean> {
+    return await this.usersService.toggleFavouriteBoard(boardId, userId);
+  }
 }

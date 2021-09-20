@@ -6,6 +6,8 @@ import { CreateUserDto } from 'common/users-communicator/dto/create-user.dto';
 import { UserI } from 'common/users-communicator/models/entities/user.interface';
 import * as bcrypt from 'bcrypt';
 import { RpcException } from '@nestjs/microservices';
+import { Types } from 'mongoose';
+
 
 @Injectable()
 export class UsersService {
@@ -42,6 +44,22 @@ export class UsersService {
 
     const user = new this.userModel({ ...dto, password: hashedPassword });
     await user.save();
+    return true;
+  }
+
+  async toggleFavouriteBoard(boardId: string, userId: string): Promise<boolean> {
+    const isBoardInFavourite = await this.userModel.findById(userId, { _id: 0, favouriteBoards: 1 })
+      .lean()
+      .exec()
+      .then(({ favouriteBoards }) => (favouriteBoards || []).includes(boardId));
+
+    const toggleOperator = isBoardInFavourite ? '$pull' : '$push';
+
+    await this.userModel.updateOne(
+      { _id: Types.ObjectId(userId) },
+      { [toggleOperator]: { favouriteBoards: boardId } },
+    );
+
     return true;
   }
 }

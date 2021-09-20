@@ -41,4 +41,8 @@ export class UsersFacadeService implements OnApplicationBootstrap {
   emailIsFree(email: string): Observable<boolean> {
     return this.usersClient.send(UsersMsg.EmailIsFree, email);
   }
+
+  boardToggleFavourite(boardId: string, userId: string): Observable<boolean> {
+    return this.usersClient.send(UsersMsg.FavouriteToggleBoard, { boardId, userId });
+  }
 }

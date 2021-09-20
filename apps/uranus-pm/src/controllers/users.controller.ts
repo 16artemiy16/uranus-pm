@@ -16,6 +16,7 @@ import { UserI } from 'common/users-communicator/models/entities/user.interface'
 import { tap } from 'rxjs/operators';
 import { ApiBearerAuth, ApiOkResponse, ApiTags, ApiUnauthorizedResponse } from '@nestjs/swagger';
 import { CustomGet } from '../decorators/custom-get.decorator';
+import { User } from '../decorators/user.decorator';
 
 @ApiTags('users')
 @Controller('users')
@@ -56,5 +57,12 @@ export class UsersController {
   @Post()
   create(@Body() dto: CreateUserDto): Observable<boolean> {
     return this.usersFacade.create(dto);
+  }
+
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard)
+  @Post('favourite/board/:boardId/toggle')
+  boardToggleFavourite(@Param('boardId') boardId: string, @User('_id') userId: string): Observable<boolean> {
+    return this.usersFacade.boardToggleFavourite(boardId, userId);
   }
 }

@@ -45,4 +45,10 @@ export class UsersController {
   emailIsFree(email: string): Promise<boolean> {
     return this.authService.isEmailFree(email);
   }
+
+  @MessagePattern(UsersMsg.FavouriteToggleBoard)
+  toggleFavouriteBoard(req: { boardId: string, userId: string }) {
+    const { boardId, userId } = req;
+    return this.usersService.toggleFavouriteBoard(boardId, userId);
+  }
 }
