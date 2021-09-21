@@ -4,7 +4,7 @@ import { AuthGuard } from '../guards/auth.guard';
 import { User } from '../decorators/user.decorator';
 import { CreateBoardDto } from 'common/pm-communicator/dto/create-board.dto';
 import { BoardI } from 'common/pm-communicator/models/entities/board.interface';
-import { Observable } from 'rxjs';
+import { combineLatest, Observable } from 'rxjs';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { ColumnI } from 'common/pm-communicator/models/entities/column.interface';
 import { CreateColumnsDto } from 'common/pm-communicator/dto/create-columns.dto';
@@ -17,13 +17,14 @@ import { UsersFacadeService } from 'common/users-communicator';
 import { Types } from 'mongoose';
 import { RemoveMembersDto } from 'common/pm-communicator/dto/remove-members.dto';
 import { AssignTaskDto } from 'common/pm-communicator/dto/assign-task.dto';
+import { BoardOfUserI } from 'common/pm-communicator/models/entities/board-of-user.interface';
 
 @ApiTags('boards')
 @Controller('boards')
 export class BoardsController {
   constructor(
     private readonly boardsFacade: BoardFacadeService,
-    private readonly usersFacade: UsersFacadeService
+    private readonly usersFacade: UsersFacadeService,
   ) {}
 
   @Get('owner/:ownerId')
@@ -34,8 +35,22 @@ export class BoardsController {
   @ApiBearerAuth()
   @UseGuards(AuthGuard)
   @Get('my')
-  getMy(@User('_id') userId: string): Observable<BoardI[]> {
-    return this.boardsFacade.getByOwner(userId);
+  getMy(@User('_id') userId: string): Observable<BoardOfUserI[]> {
+    return combineLatest([
+      this.boardsFacade.getByOwner(userId),
+      this.usersFacade
+        .getAll({ _id: Types.ObjectId(userId) }, { _id: 0, favouriteBoards: 1 }, { limit: 1 })
+        .pipe(
+          map((items) => items[0]?.favouriteBoards || [])
+        )
+    ]).pipe(
+      map(([boards, favouriteIds]) => {
+        return boards.map((board) => ({
+          ...board,
+          isFavourite: favouriteIds.includes(board._id),
+        }));
+      })
+    );
   }
 
   @ApiBearerAuth()

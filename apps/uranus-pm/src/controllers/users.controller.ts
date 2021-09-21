@@ -13,11 +13,10 @@ import { AuthGuard } from '../guards/auth.guard';
 import { CreateUserDto } from 'common/users-communicator/dto/create-user.dto';
 import { UsersFacadeService } from 'common/users-communicator';
 import { UserI } from 'common/users-communicator/models/entities/user.interface';
-import { map, tap } from 'rxjs/operators';
+import { tap } from 'rxjs/operators';
 import { ApiBearerAuth, ApiOkResponse, ApiTags, ApiUnauthorizedResponse } from '@nestjs/swagger';
 import { CustomGet } from '../decorators/custom-get.decorator';
 import { User } from '../decorators/user.decorator';
-import { Types } from 'mongoose';
 
 @ApiTags('users')
 @Controller('users')
@@ -65,17 +64,5 @@ export class UsersController {
   @Post('favourite/board/:boardId/toggle')
   boardToggleFavourite(@Param('boardId') boardId: string, @User('_id') userId: string): Observable<boolean> {
     return this.usersFacade.boardToggleFavourite(boardId, userId);
-  }
-
-  @ApiBearerAuth()
-  @UseGuards(AuthGuard)
-  @Get('favourite/board')
-  getFavouriteBoardsIds(@User('_id') userId: string): Observable<string[]> {
-    const userObjectId = Types.ObjectId(userId);
-    return this.usersFacade
-      .getAll({ _id: userObjectId }, { _id: 0, favouriteBoards: 1 }, { limit: 1 })
-      .pipe(
-        map((items) => items[0]?.favouriteBoards)
-      )
   }
 }
