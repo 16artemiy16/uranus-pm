@@ -49,7 +49,18 @@ export class BoardsController {
           ...board,
           isFavourite: favouriteIds.includes(board._id),
         }));
-      })
+      }),
+      switchMap((boards) => {
+        const ownersObjectsIds = boards.map(({ ownerId }) => Types.ObjectId(ownerId));
+        return this.usersFacade.getAll({ _id: { $in: ownersObjectsIds } }, { email: 1, img: 1 }).pipe(
+          map((owners) => {
+            return boards.map((board) => ({
+              ...board,
+              owner: owners.find((item) => item._id === board.ownerId)
+            }));
+          })
+        )
+      }),
     );
   }
 

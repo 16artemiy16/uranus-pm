@@ -3,4 +3,5 @@ export interface UserI {
   email: string;
   password: string;
   favouriteBoards: string[];
+  img?: string;
 }
