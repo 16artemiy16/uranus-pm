@@ -77,7 +77,16 @@ export class BoardsService {
       });
     }
 
-    const newTask = { ...dto, boardId };
+    const number = await this.columnModel.aggregate([
+      { $match: { boardId } },
+      { $unwind: '$tasks' },
+      { $project: { _id: 0, tasks: 1 } },
+      { $project: { number: '$tasks.number' } },
+      { $sort: { number: -1 } },
+      { $limit: 1 }
+    ]).exec().then(([item]) => (item?.number || 0) + 1);
+
+    const newTask = { ...dto, boardId, number };
     await this.columnModel.update({ _id: columnId }, { $push: { tasks: newTask } })
 
     return true;

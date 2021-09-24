@@ -5,6 +5,9 @@ export type TaskDocument = Task & Document;
 
 @Schema({ timestamps: { createdAt: true } })
 export class Task {
+  @Prop()
+  number: number;
+
   @Prop({ required: true })
   title: string;
 
@@ -19,4 +22,4 @@ export class Task {
 }
 
 export const TaskSchema = SchemaFactory.createForClass(Task);
-TaskSchema.index({ boardId: 1 });
+TaskSchema.index({ boardId: 1, number: 1 }, { uniq: true });
