@@ -7,6 +7,7 @@ import { CreateUserDto } from 'common/users-communicator/dto/create-user.dto';
 import { UsersMsg } from 'common/users-communicator/models/msg.model';
 import { JwtUserType } from 'common/users-communicator/models/entities/jwt-user.type';
 import { QueryOptions } from 'mongoose';
+import { catchError, tap } from 'rxjs/operators';
 
 @Injectable()
 export class UsersFacadeService implements OnApplicationBootstrap {

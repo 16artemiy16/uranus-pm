@@ -29,7 +29,7 @@ export class AnalyticsController {
   getUserFavouriteBoards(@Query('limit') limit: number, @User('_id') userId: string) {
     return this.analyticsFacade.getUserFavouriteBoards(userId, limit || 5).pipe(
       switchMap((boardsStats) => {
-        const boardsIds = boardsStats.map(({ board }) => Types.ObjectId(board));
+        const boardsIds = boardsStats.map(({ board }) => board);
         return this.boardsFacade.get({ _id: { $in: boardsIds } }, { name: 1 }).pipe(
           map((boards) => ({ boards, boardsStats }))
         )

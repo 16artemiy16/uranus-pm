@@ -29,7 +29,7 @@ export class BoardsService {
 
   async create(userId: string, dto: CreateBoardDto): Promise<BoardDocument> {
     const { key } = dto;
-    const board = new this.boardModel({ ...dto, key: key.toUpperCase(), ownerId: userId });
+    const board = new this.boardModel({ ...dto, _id: key.toUpperCase(), ownerId: userId });
     const savedBoard = await board.save();
 
     const SCRUM_COLUMNS = [

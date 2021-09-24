@@ -79,7 +79,7 @@ export class BoardsController {
   @Get('is-key-free/:key')
   isKeyFree(@Param('key') key: string): Observable<boolean> {
     return this.boardsFacade
-      .get({ key }, { _id: 0, key: 1 })
+      .get({ _id: key }, { _id: 1 })
       .pipe(
         map((boards) => boards.length === 0)
       );
