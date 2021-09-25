@@ -28,8 +28,19 @@ export class BoardsService {
   }
 
   async create(userId: string, dto: CreateBoardDto): Promise<BoardDocument> {
-    const { key } = dto;
-    const board = new this.boardModel({ ...dto, _id: key.toUpperCase(), ownerId: userId });
+    const { key, ...restDto } = dto;
+
+    const isKeyFree = await this.boardModel.count({ _id: key }).lean().exec()
+      .then((count) => count === 0);
+
+    if (!isKeyFree) {
+      throw new RpcException({
+        statusCode: 400,
+        message: 'boardKeyIsOccupied',
+      });
+    }
+
+    const board = new this.boardModel({ ...restDto, _id: key, ownerId: userId });
     const savedBoard = await board.save();
 
     const SCRUM_COLUMNS = [

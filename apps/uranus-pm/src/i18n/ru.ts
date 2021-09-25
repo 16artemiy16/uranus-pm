@@ -4,6 +4,7 @@ export const ru = {
   boardHasNoColumns: 'У этой доски нет колонок!',
   noTaskWithThisId: 'Задачи с таким id не существует!',
   boardDoesNotExist: 'Такой доски не существует!',
+  boardKeyIsOccupied: 'Доска с таким ключём уже существует!',
   taskCodeIncorrectFormat: 'Неверный формат кода задачи, код должен содерзать один дефис! Пример: IT-4.',
   taskWithTheCodeDoesNotExist: 'Задача с таким кодом не существует',
 };
