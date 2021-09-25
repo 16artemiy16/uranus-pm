@@ -1,4 +1,14 @@
-import { Body, Controller, Get, NotFoundException, Param, Post, Put, UseGuards } from '@nestjs/common';
+import {
+  BadRequestException,
+  Body,
+  Controller,
+  Get,
+  NotFoundException,
+  Param,
+  Post,
+  Put,
+  UseGuards
+} from '@nestjs/common';
 import { BoardFacadeService } from 'common/pm-communicator/services/board-facade.service';
 import { AuthGuard } from '../guards/auth.guard';
 import { User } from '../decorators/user.decorator';
@@ -18,6 +28,7 @@ import { Types } from 'mongoose';
 import { RemoveMembersDto } from 'common/pm-communicator/dto/remove-members.dto';
 import { AssignTaskDto } from 'common/pm-communicator/dto/assign-task.dto';
 import { BoardOfUserI } from 'common/pm-communicator/models/entities/board-of-user.interface';
+import { TaskI } from 'common/pm-communicator/models/entities/task.interface';
 
 @ApiTags('boards')
 @Controller('boards')
@@ -74,6 +85,37 @@ export class BoardsController {
   @Get(':boardId/columns')
   getColumns(@Param('boardId') boardId: string): Observable<ColumnI[]> {
     return this.boardsFacade.getColumns(boardId);
+  }
+
+  @Get('task/:code')
+  getTaskByCode(@Param('code') code: string): Observable<TaskI> {
+    const [boardRaw, numberStr, ...rest] = code.split('-');
+    const number = +numberStr;
+    const board = boardRaw.toUpperCase();
+
+    if (rest.length || isNaN(number)) {
+      throw new BadRequestException('taskCodeIncorrectFormat');
+    }
+
+    return this.boardsFacade.getColumns(board).pipe(
+      map((columns) => {
+        let task = null;
+        columns.some(({ tasks }) => {
+          const foundTask = tasks.find((item) => item.number === number);
+          if (foundTask) {
+            task = foundTask;
+            return;
+          }
+        });
+
+        return task;
+      }),
+      tap((task) => {
+        if (!task) {
+          throw new NotFoundException('taskWithTheCodeDoesNotExist')
+        }
+      })
+    );
   }
 
   @Get('is-key-free/:key')

@@ -6,6 +6,7 @@ import { Observable } from 'rxjs';
 import { BoardI } from 'common/pm-communicator/models/entities/board.interface';
 import { CreateBoardDto } from 'common/pm-communicator/dto/create-board.dto';
 import { CreateTaskDto } from 'common/pm-communicator/dto/create-task.dto';
+import { ColumnI } from 'common/pm-communicator/models/entities/column.interface';
 
 @Injectable()
 export class BoardFacadeService implements OnApplicationBootstrap {
@@ -38,7 +39,7 @@ export class BoardFacadeService implements OnApplicationBootstrap {
     return this.pmClient.send(BoardMsg.Create, { userId, dto });
   }
 
-  getColumns(boardId: string): Observable<any[]> {
+  getColumns(boardId: string): Observable<ColumnI[]> {
     return this.pmClient.send(BoardMsg.GetColumns, { boardId });
   }
 
