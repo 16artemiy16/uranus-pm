@@ -40,7 +40,9 @@ export class BoardsService {
       });
     }
 
-    const board = new this.boardModel({ ...restDto, _id: key, ownerId: userId });
+    const members = [{ userId, role: BoardUserRoleEnum.Admin, status: BoardUserStatusEnum.Active }];
+
+    const board = new this.boardModel({ ...restDto, members, _id: key, ownerId: userId });
     const savedBoard = await board.save();
 
     const SCRUM_COLUMNS = [
