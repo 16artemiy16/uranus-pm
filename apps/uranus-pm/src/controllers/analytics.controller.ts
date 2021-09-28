@@ -54,7 +54,7 @@ export class AnalyticsController {
         return this.boardsFacade.aggregateColumns([
           { $unwind: '$tasks' },
           { $project: {
-            _id: { $toString: '$tasks._id'}, title: '$tasks.title', boardId: '$tasks.boardId'
+            _id: { $toString: '$tasks._id'}, title: '$tasks.title', boardId: '$tasks.boardId', number: '$tasks.number'
           } },
           { $match: { _id: { $in: tasksIds } } }
         ]).pipe(
