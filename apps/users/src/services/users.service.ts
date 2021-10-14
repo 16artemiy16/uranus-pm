@@ -7,12 +7,15 @@ import { UserI } from 'common/users-communicator/models/entities/user.interface'
 import * as bcrypt from 'bcrypt';
 import { RpcException } from '@nestjs/microservices';
 import { Types } from 'mongoose';
+import { Notification, NotificationDocument } from '../schemas/notification.schema';
+import { NotificationI } from 'common/users-communicator/models/entities/notification.interface';
 
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectModel(User.name) private userModel: Model<UserDocument>,
+    @InjectModel(Notification.name) private notificationModel: Model<NotificationDocument>,
   ) {}
 
   async getAll(query: any = {}, projection: any = {}, options: QueryOptions = {}): Promise<UserI[]> {
@@ -61,5 +64,23 @@ export class UsersService {
     );
 
     return true;
+  }
+
+  async notifyUser(userId: string, text: string, type: string): Promise<boolean> {
+    await new this.notificationModel({ userId, text, type }).save();
+    return true;
+  }
+
+  async notificationsToggleRead(ids: string[], isRead: boolean): Promise<boolean> {
+    const objectIds = ids.map((id) => Types.ObjectId(id));
+
+    await this.notificationModel.updateMany({ _id: { $in: objectIds } }, { $set: { isRead } });
+
+    return true;
+  }
+
+  async getUserNotifications(userId: string): Promise<NotificationI[]> {
+    const objectId = Types.ObjectId(userId);
+    return await this.notificationModel.find({ userId: objectId }).lean().exec() as NotificationI[];
   }
 }

@@ -7,6 +7,7 @@ import { UserI } from 'common/users-communicator/models/entities/user.interface'
 import { CreateUserDto } from 'common/users-communicator/dto/create-user.dto';
 import { JwtUserType } from 'common/users-communicator/models/entities/jwt-user.type';
 import { QueryOptions } from 'mongoose';
+import { NotificationI } from 'common/users-communicator/models/entities/notification.interface';
 
 @Controller()
 export class UsersController {
@@ -47,8 +48,26 @@ export class UsersController {
   }
 
   @MessagePattern(UsersMsg.FavouriteToggleBoard)
-  toggleFavouriteBoard(req: { boardId: string, userId: string }) {
+  toggleFavouriteBoard(req: { boardId: string, userId: string }): Promise<boolean> {
     const { boardId, userId } = req;
     return this.usersService.toggleFavouriteBoard(boardId, userId);
+  }
+
+  @MessagePattern(UsersMsg.Notify)
+  notifyUser(req: { userId: string, text: string, type:  string }): Promise<boolean> {
+    const { userId, text, type } = req;
+    return this.usersService.notifyUser(userId, text, type);
+  }
+
+  @MessagePattern(UsersMsg.NotificationsToggleRead)
+  notificationsToggleRead(req: { ids: string[], isRead: boolean }): Promise<boolean> {
+    const { ids, isRead } = req;
+    return this.usersService.notificationsToggleRead(ids, isRead);
+  }
+
+  @MessagePattern(UsersMsg.GetNotifications)
+  getUserNotifications(req: { userId: string }): Promise<NotificationI[]> {
+    const { userId } = req;
+    return this.usersService.getUserNotifications(userId);
   }
 }

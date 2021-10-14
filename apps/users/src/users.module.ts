@@ -4,6 +4,7 @@ import { UsersService } from './services/users.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import mongoConfig from '../../../config/mongo.config';
 import { User, UserSchema } from './schemas/user.schema';
+import { Notification, NotificationSchema } from './schemas/notification.schema';
 import { AuthService } from './services/auth.service';
 import { JwtModule } from '@nestjs/jwt';
 
@@ -11,7 +12,8 @@ import { JwtModule } from '@nestjs/jwt';
   imports: [
     MongooseModule.forRoot(mongoConfig.users.connection),
     MongooseModule.forFeature([
-      { name: User.name, schema: UserSchema }
+      { name: User.name, schema: UserSchema },
+      { name: Notification.name, schema: NotificationSchema },
     ]),
     JwtModule.register({
       secret: 'secret',
