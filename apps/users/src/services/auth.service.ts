@@ -15,8 +15,8 @@ export class AuthService {
     const user = await this.usersService.findOne({ email });
 
     if (user && await bcrypt.compare(password, user.password)) {
-      const { password, ...result } = user;
-      return this.jwtService.sign(result);
+      const { _id, email } = user;
+      return this.jwtService.sign({ _id, email });
     }
 
     return null;
@@ -28,9 +28,5 @@ export class AuthService {
 
   async isEmailFree(email: string): Promise<boolean> {
     return await this.usersService.count({ email }) === 0;
-  }
-
-  async toggleFavouriteBoard(boardId: string, userId: string): Promise<boolean> {
-    return await this.usersService.toggleFavouriteBoard(boardId, userId);
   }
 }
