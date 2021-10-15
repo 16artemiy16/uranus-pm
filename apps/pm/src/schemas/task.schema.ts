@@ -5,6 +5,9 @@ export type TaskDocument = Task & Document;
 
 @Schema({ timestamps: { createdAt: true } })
 export class Task {
+  @Prop({ required: true })
+  _id: string;
+
   @Prop()
   number: number;
 

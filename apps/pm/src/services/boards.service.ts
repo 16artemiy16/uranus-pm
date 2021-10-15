@@ -99,7 +99,8 @@ export class BoardsService {
       { $limit: 1 }
     ]).exec().then(([item]) => (item?.number || 0) + 1);
 
-    const newTask = { ...dto, boardId, number };
+    const newTask = { ...dto, boardId, number, _id: `${boardId}-${number}` };
+
     await this.columnModel.update({ _id: columnId }, { $push: { tasks: newTask } })
 
     return true;
