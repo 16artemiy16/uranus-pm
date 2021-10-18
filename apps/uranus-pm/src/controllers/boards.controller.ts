@@ -87,37 +87,6 @@ export class BoardsController {
     return this.boardsFacade.getColumns(boardId);
   }
 
-  @Get('task/:code')
-  getTaskByCode(@Param('code') code: string): Observable<TaskI> {
-    const [boardRaw, numberStr, ...rest] = code.split('-');
-    const number = +numberStr;
-    const board = boardRaw.toUpperCase();
-
-    if (rest.length || isNaN(number)) {
-      throw new BadRequestException('taskCodeIncorrectFormat');
-    }
-
-    return this.boardsFacade.getColumns(board).pipe(
-      map((columns) => {
-        let task = null;
-        columns.some(({ tasks }) => {
-          const foundTask = tasks.find((item) => item.number === number);
-          if (foundTask) {
-            task = foundTask;
-            return;
-          }
-        });
-
-        return task;
-      }),
-      tap((task) => {
-        if (!task) {
-          throw new NotFoundException('taskWithTheCodeDoesNotExist')
-        }
-      })
-    );
-  }
-
   @Get('is-key-free/:key')
   isKeyFree(@Param('key') key: string): Observable<boolean> {
     return this.boardsFacade
@@ -176,23 +145,5 @@ export class BoardsController {
   @Post(':boardId/members/delete')
   removeMembers(@Param('boardId') boardId: string, @Body() dto: RemoveMembersDto): Observable<boolean> {
     return this.boardsFacade.removeMembers(boardId, dto.members);
-  }
-
-  @Put('task/:taskId/move')
-  moveTask(
-    @Param('taskId') taskId: string,
-    @Body() dto: MoveTaskDto,
-  ): Observable<boolean> {
-    const { toIndex, targetColumnId } = dto;
-    return this.boardsFacade.moveTask(taskId, toIndex, targetColumnId);
-  }
-
-  @Post('task/:taskId/assignee')
-  assignTask(
-    @Param('taskId') taskId: string,
-    @Body() dto: AssignTaskDto,
-  ): Observable<boolean> {
-    const { assignee } = dto;
-    return this.boardsFacade.assignTask(taskId, assignee);
   }
 }
