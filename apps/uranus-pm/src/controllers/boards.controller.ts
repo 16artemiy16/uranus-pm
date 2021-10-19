@@ -1,13 +1,11 @@
 import {
-  BadRequestException,
   Body,
   Controller,
   Get,
   NotFoundException,
   Param,
-  Post,
-  Put,
-  UseGuards
+  Post, Query,
+  UseGuards,
 } from '@nestjs/common';
 import { BoardFacadeService } from 'common/pm-communicator/services/board-facade.service';
 import { AuthGuard } from '../guards/auth.guard';
@@ -19,16 +17,14 @@ import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { ColumnI } from 'common/pm-communicator/models/entities/column.interface';
 import { CreateColumnsDto } from 'common/pm-communicator/dto/create-columns.dto';
 import { CreateTaskDto } from 'common/pm-communicator/dto/create-task.dto';
-import { MoveTaskDto } from 'common/pm-communicator/dto/move-task.dto';
 import { AddMembersDto } from 'common/pm-communicator/dto/add-members.dto';
 import { UserI } from 'common/users-communicator/models/entities/user.interface';
 import { map, switchMap, tap } from 'rxjs/operators';
 import { UsersFacadeService } from 'common/users-communicator';
 import { Types } from 'mongoose';
 import { RemoveMembersDto } from 'common/pm-communicator/dto/remove-members.dto';
-import { AssignTaskDto } from 'common/pm-communicator/dto/assign-task.dto';
 import { BoardOfUserI } from 'common/pm-communicator/models/entities/board-of-user.interface';
-import { TaskI } from 'common/pm-communicator/models/entities/task.interface';
+import { ApiImplicitQuery } from '@nestjs/swagger/dist/decorators/api-implicit-query.decorator';
 
 @ApiTags('boards')
 @Controller('boards')
@@ -72,6 +68,31 @@ export class BoardsController {
           })
         )
       }),
+    );
+  }
+
+  @ApiImplicitQuery({
+    name: 'fields',
+    description: 'The projection fields. If empty - returns all fields.',
+    required: false,
+    isArray: true,
+  })
+  @Get(':id')
+  getById(
+    @Param('id') _id: string,
+    @Query('fields') fields: string[] = [],
+  ): Observable<BoardI> {
+    const fieldsList = Array.isArray(fields) ? fields : [fields];
+    const projection = fieldsList
+      .reduce(
+        (output, current) => {
+          return ({ ...output, [current]: 1 });
+        },
+        { ...fieldsList.length && { _id: 0 } }
+      );
+
+    return this.boardsFacade.get({ _id }, projection).pipe(
+      map(([board]) => board)
     );
   }
 
